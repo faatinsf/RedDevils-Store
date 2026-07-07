@@ -194,5 +194,5 @@ document.addEventListener('DOMContentLoaded', () => {
 function logout() {
   localStorage.removeItem('rd_role');
   localStorage.removeItem('rd_user_now');
-  window.location.href = 'index2.html';
+  window.location.href = 'index.html';
 }
