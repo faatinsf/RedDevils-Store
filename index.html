@@ -15,12 +15,17 @@
       background: linear-gradient(90deg, var(--red) 0%, var(--gold) 50%, var(--red) 100%);
     }
 
-    /* ===== HERO ===== */
+    /* ===================================================
+       HERO — pas di 1 layar (100dvh), konten tidak overflow
+       =================================================== */
     .hero {
-      min-height: 100vh;
+      height: 100dvh;           /* tepat 1 layar */
+      min-height: 560px;        /* batas bawah di layar sangat kecil */
       padding-top: var(--navbar-h);
-      position: relative; overflow: hidden;
-      display: flex; align-items: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
     }
     .hero-bg {
       position: absolute; inset: 0; z-index: 0;
@@ -38,82 +43,96 @@
       mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
     }
 
-    /* FIXED: hero-inner pakai grid yang lebih terkontrol */
     .hero-inner {
       max-width: var(--max-w);
       margin: 0 auto;
-      padding: 4rem 2rem 3rem;
+      padding: 1.5rem 2rem;
       display: grid;
-      grid-template-columns: 1fr 340px; /* FIXED: kolom kanan fixed width */
-      gap: 3rem;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
       align-items: center;
       width: 100%;
       position: relative; z-index: 1;
     }
 
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 0.4rem 1.2rem;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0.35rem 1rem;
       background: rgba(218,41,28,0.1); border: 1px solid rgba(218,41,28,0.4);
       border-radius: var(--radius-pill);
-      font-family: var(--font-cond); font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--red);
-      margin-bottom: 1.5rem;
+      font-family: var(--font-cond); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--red);
+      margin-bottom: 1rem;
     }
-    .hero-eyebrow img { width: 24px; height: 24px; object-fit: contain; }
+    .hero-eyebrow img { width: 20px; height: 20px; object-fit: contain; }
 
-    /* FIXED: font-size lebih kecil supaya tidak terlalu besar */
+    /* Title lebih compact supaya tidak overflow */
     .hero-title {
       font-family: var(--font-display);
-      font-size: clamp(48px, 8vw, 110px);
-      line-height: 0.88;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 0.9;
       letter-spacing: 0.01em;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     .hero-title .line-red  { color: var(--red); }
     .hero-title .line-gold {
-      color: var(--gold); font-size: 0.38em; letter-spacing: 0.16em;
-      display: block; margin-top: 0.1em;
+      color: var(--gold); font-size: 0.35em; letter-spacing: 0.16em;
+      display: block; margin-top: 0.15em;
     }
 
     .hero-desc {
-      font-size: 1rem; line-height: 1.75; color: var(--gray-light);
-      max-width: 480px; margin-bottom: 2.25rem;
+      font-size: 0.88rem; line-height: 1.65; color: var(--gray-light);
+      max-width: 460px; margin-bottom: 1.5rem;
     }
     .hero-desc strong { color: var(--white); font-weight: 600; }
 
-    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hero-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 
     .hero-trust {
-      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
-      padding-top: 1.75rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;
+      padding-top: 1.25rem; border-top: 1px solid var(--border);
     }
-    .trust-item { display: flex; align-items: center; gap: 8px; }
-    .trust-item img { width: 14px; height: 14px; object-fit: contain; opacity: 0.7; }
-    .trust-item span { font-family: var(--font-cond); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); }
+    .trust-item { display: flex; align-items: center; gap: 6px; }
+    .trust-item img { width: 12px; height: 12px; object-fit: contain; opacity: 0.7; }
+    .trust-item span { font-family: var(--font-cond); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); }
 
-    /* FIXED: hero logo col lebih compact */
     .hero-logo-col {
       display: flex; align-items: center; justify-content: center;
       position: relative;
-      width: 340px; height: 340px; /* FIXED: explicit size */
+      width: 300px; height: 300px;
     }
     .hero-logo-rings {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
     }
     .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(218,41,28,0.2); }
-    .ring-1 { width: 280px; height: 280px; animation: ringRotate 18s linear infinite; }
-    .ring-2 { width: 330px; height: 330px; border-color: rgba(251,225,34,0.08); animation: ringRotate 28s linear infinite reverse; }
-    .ring-3 { display: none; } /* hidden on hero — too many rings */
+    .ring-1 { width: 240px; height: 240px; animation: ringRotate 18s linear infinite; }
+    .ring-2 { width: 290px; height: 290px; border-color: rgba(251,225,34,0.08); animation: ringRotate 28s linear infinite reverse; }
     @keyframes ringRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .ring-1::before {
-      content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-      width: 12px; height: 12px; background: var(--red); border-radius: 50%;
-      box-shadow: 0 0 12px var(--red), 0 0 24px rgba(218,41,28,0.5);
+      content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+      width: 10px; height: 10px; background: var(--red); border-radius: 50%;
+      box-shadow: 0 0 10px var(--red), 0 0 20px rgba(218,41,28,0.5);
     }
 
-    /* ===== STATS STRIP ===== */
+    /* ===================================================
+       MARQUEE — fixed tipis
+       =================================================== */
+    .marquee-bar { background: var(--red); overflow: hidden; border-bottom: 2px solid var(--red-dark); }
+    .marquee-inner { display: flex; animation: marquee 22s linear infinite; white-space: nowrap; }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 22px;
+      font-family: var(--font-cond); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: #fff;
+      border-right: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;
+    }
+    .marquee-item img { width: 14px; height: 14px; object-fit: contain; filter: brightness(0) invert(1); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ===================================================
+       STATS STRIP — compact, pas di layar
+       =================================================== */
     .stats-strip {
       background: var(--surface-2);
       border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
@@ -124,145 +143,153 @@
       padding: 0 2rem;
     }
     .strip-item {
-      padding: 1.75rem 1.25rem;
+      padding: 1.25rem 1rem;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       border-right: 1px solid var(--border); text-align: center;
     }
     .strip-item:last-child { border-right: none; }
     .strip-num {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: 0.04em;
+      font-size: clamp(1.6rem, 2.5vw, 2.4rem); letter-spacing: 0.04em;
       color: var(--red); line-height: 1;
     }
     .strip-label {
-      font-family: var(--font-cond); font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-top: 0.3rem;
+      font-family: var(--font-cond); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-top: 0.2rem;
     }
 
-    /* ===== CATEGORIES ===== */
+    /* ===================================================
+       SECTION GLOBAL — setiap section muat di 1 layar
+       =================================================== */
+    /* Override .section dari main.css agar padding lebih efisien */
+    .section {
+      padding: 3rem 1.5rem;
+    }
+    .section-header {
+      text-align: center; margin-bottom: 1.75rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.04em; line-height: 1; margin-bottom: 0.6rem; color: var(--white);
+    }
+    .section-subtitle { color: var(--gray); font-size: 0.88rem; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    /* ===================================================
+       CATEGORIES — 4 kolom, card lebih compact
+       =================================================== */
     .cat-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
+      gap: 0.75rem;
     }
     .cat-card {
       position: relative; border-radius: var(--radius); overflow: hidden;
       aspect-ratio: 3/4; cursor: pointer;
       border: 1px solid var(--border); transition: var(--transition);
     }
-    .cat-card:first-child { grid-column: span 2; aspect-ratio: auto; min-height: 320px; }
+    .cat-card:first-child { grid-column: span 2; aspect-ratio: auto; min-height: 280px; }
     .cat-card img.cat-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .cat-card:hover img.cat-img { transform: scale(1.07); }
     .cat-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(8,8,8,0.92) 100%); }
     .cat-card:hover { border-color: var(--border-red); box-shadow: var(--shadow-red); }
-    .cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; }
-    .cat-mu-logo { width: 40px; height: 40px; object-fit: contain; margin-bottom: 0.4rem; filter: drop-shadow(0 0 6px rgba(218,41,28,0.8)); }
-    .cat-name { font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.7rem); letter-spacing: 0.04em; color: var(--white); margin-bottom: 0.2rem; }
-    .cat-count { font-family: var(--font-cond); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    .cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; }
+    .cat-mu-logo { width: 32px; height: 32px; object-fit: contain; margin-bottom: 0.3rem; filter: drop-shadow(0 0 6px rgba(218,41,28,0.8)); }
+    .cat-name { font-family: var(--font-display); font-size: clamp(1rem, 1.8vw, 1.5rem); letter-spacing: 0.04em; color: var(--white); margin-bottom: 0.15rem; }
+    .cat-count { font-family: var(--font-cond); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
     .cat-arrow {
-      position: absolute; top: 1rem; right: 1rem;
-      width: 32px; height: 32px; background: rgba(218,41,28,0.8);
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      width: 28px; height: 28px; background: rgba(218,41,28,0.8);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 0.85rem; color: #fff;
+      font-size: 0.8rem; color: #fff;
       opacity: 0; transform: translateY(8px); transition: var(--transition);
     }
     .cat-card:hover .cat-arrow { opacity: 1; transform: translateY(0); }
 
-    /* ===== FEATURED PRODUCTS ===== */
+    /* ===================================================
+       FEATURED PRODUCTS — 4 kolom compact
+       =================================================== */
     .products-header {
       display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: 2rem; gap: 1rem;
+      margin-bottom: 1.5rem; gap: 1rem;
     }
-    .products-tabs {
-      display: flex; gap: 0.4rem;
-      background: var(--surface-2); padding: 0.3rem;
-      border-radius: var(--radius-pill); border: 1px solid var(--border);
-    }
-    .tab-btn {
-      padding: 0.35rem 1rem; border-radius: var(--radius-pill);
-      font-family: var(--font-cond); font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); transition: var(--transition);
-    }
-    .tab-btn.active, .tab-btn:hover { background: var(--red); color: var(--white); }
 
-    /* FIXED: 4 kolom hanya jika layar cukup lebar */
     .mock-products {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1.25rem;
+      gap: 1rem;
     }
     .mock-product {
       background: var(--surface-2); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden; transition: var(--transition); cursor: pointer;
     }
-    .mock-product:hover { border-color: var(--border-red); box-shadow: var(--shadow-red); transform: translateY(-5px); }
+    .mock-product:hover { border-color: var(--border-red); box-shadow: var(--shadow-red); transform: translateY(-4px); }
     .mock-product-img {
       aspect-ratio: 1; background: var(--surface-3);
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
     }
-    .mock-product-img img.prod-mu-logo {
-      width: 55px; height: 55px; object-fit: contain;
-      filter: drop-shadow(0 0 20px rgba(218,41,28,0.6));
-      opacity: 0.35; transition: var(--transition);
-    }
-    .mock-product:hover .mock-product-img img.prod-mu-logo { opacity: 0.55; transform: scale(1.1); }
-    .mock-product-img .prod-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .mock-product-img .product-badge { position: absolute; top: 0.75rem; left: 0.75rem; }
+    .mock-product-img img.cat-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .mock-product-img .product-badge { position: absolute; top: 0.6rem; left: 0.6rem; }
     .mock-product-img .quick-add-overlay {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 1.2rem 0.75rem 0.75rem;
-      background: linear-gradient(to top, rgba(218,41,28,0.95), transparent);
-      font-family: var(--font-cond); font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; text-align: center;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(8, 8, 8, 0.85);
+      font-family: var(--font-cond); font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; text-align: center; color: var(--gold);
       transform: translateY(100%); transition: var(--transition);
     }
     .mock-product:hover .quick-add-overlay { transform: translateY(0); }
-    .mock-product-info { padding: 0.875rem; }
-    .mock-product-cat { font-size: 0.66rem; color: var(--red); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
-    .mock-product-name { font-weight: 600; font-size: 0.875rem; color: var(--white); margin-bottom: 0.5rem; line-height: 1.3; }
+    .mock-product-info { padding: 0.75rem; }
+    .mock-product-cat { font-size: 0.62rem; color: var(--red); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; }
+    .mock-product-name { font-weight: 600; font-size: 0.82rem; color: var(--white); margin-bottom: 0.4rem; line-height: 1.3; }
     .mock-product-bottom { display: flex; align-items: center; justify-content: space-between; }
-    .mock-product-price { font-weight: 700; font-size: 0.9rem; color: var(--white); }
-    .mock-product-old { font-size: 0.72rem; color: var(--gray); text-decoration: line-through; margin-right: 0.3rem; }
-    .btn-add-small {
-      width: 28px; height: 28px; background: var(--red); color: var(--white);
-      border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; transition: var(--transition); flex-shrink: 0;
-    }
-    .btn-add-small:hover { background: var(--red-dark); transform: scale(1.1); }
+    .mock-product-price { font-weight: 600; font-size: 0.7rem; color: var(--gold); letter-spacing: 0.04em; }
 
-    /* ===== THE CLUB SECTION ===== */
+    /* ===================================================
+       THE CLUB SECTION
+       =================================================== */
     .club-section { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .club-inner {
       display: grid;
-      grid-template-columns: 280px 1fr; /* FIXED: left col fixed width */
-      gap: 4rem; align-items: center;
+      grid-template-columns: 240px 1fr;
+      gap: 3rem; align-items: center;
     }
     .club-logo-col {
       display: flex; align-items: center; justify-content: center;
-      position: relative; width: 280px; height: 320px;
+      position: relative; width: 240px; height: 280px;
     }
-    .club-logo-col .ring-1 { width: 260px; height: 260px; }
-    .club-logo-col .ring-2 { width: 310px; height: 310px; }
+    .club-logo-col .ring-1 { width: 220px; height: 220px; }
+    .club-logo-col .ring-2 { width: 270px; height: 270px; }
     .club-logo-img {
-      width: 200px; height: 200px; object-fit: contain;
+      width: 170px; height: 170px; object-fit: contain;
       position: relative; z-index: 1;
-      filter: drop-shadow(0 0 60px rgba(218,41,28,0.8)) drop-shadow(0 0 20px rgba(251,225,34,0.3));
+      filter: drop-shadow(0 0 50px rgba(218,41,28,0.8)) drop-shadow(0 0 16px rgba(251,225,34,0.3));
       animation: heroFloat 5s ease-in-out infinite, heroGlow 3s ease-in-out infinite;
     }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50%       { transform: translateY(-12px) rotate(1deg); }
+    }
+    @keyframes heroGlow {
+      0%, 100% { filter: drop-shadow(0 0 50px rgba(218,41,28,0.8)) drop-shadow(0 0 16px rgba(251,225,34,0.3)); }
+      50%       { filter: drop-shadow(0 0 70px rgba(218,41,28,1)) drop-shadow(0 0 30px rgba(251,225,34,0.6)); }
+    }
 
-    .club-founded { font-family: var(--font-cond); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
-    .club-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 4rem); letter-spacing: 0.04em; line-height: 0.95; color: var(--white); margin-bottom: 1.25rem; }
-    .club-subtitle { font-size: 0.95rem; color: var(--gray-light); line-height: 1.7; margin-bottom: 2rem; max-width: 500px; }
-    .club-stats { display: flex; gap: 2.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-    .club-stat-num { font-family: var(--font-display); font-size: 3rem; color: var(--red); line-height: 1; }
-    .club-stat-label { font-family: var(--font-cond); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-top: 0.2rem; }
+    .club-founded { font-family: var(--font-cond); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .club-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 3rem); letter-spacing: 0.04em; line-height: 0.95; color: var(--white); margin-bottom: 1rem; }
+    .club-subtitle { font-size: 0.875rem; color: var(--gray-light); line-height: 1.65; margin-bottom: 1.5rem; max-width: 500px; }
+    .club-stats { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .club-stat-num { font-family: var(--font-display); font-size: 2.4rem; color: var(--red); line-height: 1; }
+    .club-stat-label { font-family: var(--font-cond); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-top: 0.15rem; }
 
-    /* ===== WHY BUY ===== */
-    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    /* ===================================================
+       WHY / FEATURES — 3 kolom compact
+       =================================================== */
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .why-card {
       background: var(--surface-2); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.75rem 1.5rem;
+      border-radius: var(--radius); padding: 1.5rem 1.25rem;
       transition: var(--transition); position: relative; overflow: hidden;
     }
     .why-card::before {
@@ -270,729 +297,646 @@
       background: linear-gradient(90deg, var(--red), var(--gold));
       transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
     }
-    .why-card:hover { border-color: var(--border-red); transform: translateY(-5px); box-shadow: var(--shadow-red); }
+    .why-card:hover { border-color: var(--border-red); transform: translateY(-4px); box-shadow: var(--shadow-red); }
     .why-card:hover::before { transform: scaleX(1); }
     .why-icon {
-      width: 48px; height: 48px;
+      width: 42px; height: 42px;
       background: rgba(218,41,28,0.1); border: 1px solid var(--border-red);
       border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
     }
-    .why-icon img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(218,41,28,0.6)); }
-    .why-icon-emoji { font-size: 1.4rem; }
-    .why-title { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: 0.04em; color: var(--white); margin-bottom: 0.5rem; }
-    .why-desc { font-size: 0.875rem; color: var(--gray); line-height: 1.7; }
+    .why-icon-emoji { font-size: 1.3rem; }
+    .why-title { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.04em; color: var(--white); margin-bottom: 0.4rem; }
+    .why-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.65; }
 
-    /* ===== TESTIMONIALS ===== */
-    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    /* ===================================================
+       TESTIMONIALS — 3 kolom compact
+       =================================================== */
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .testi-card {
       background: var(--surface-2); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.5rem; transition: var(--transition);
+      border-radius: var(--radius); padding: 1.25rem; transition: var(--transition);
     }
-    .testi-card:hover { border-color: var(--border-red); transform: translateY(-4px); }
-    .testi-stars { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 0.75rem; }
-    .testi-text { font-size: 0.875rem; color: var(--gray-light); line-height: 1.7; margin-bottom: 1.25rem; font-style: italic; }
-    .testi-author { display: flex; align-items: center; gap: 0.75rem; }
+    .testi-card:hover { border-color: var(--border-red); transform: translateY(-3px); }
+    .testi-stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 2px; margin-bottom: 0.6rem; }
+    .testi-text { font-size: 0.82rem; color: var(--gray-light); line-height: 1.65; margin-bottom: 1rem; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 0.65rem; }
     .testi-avatar {
-      width: 36px; height: 36px; background: rgba(218,41,28,0.15);
+      width: 32px; height: 32px; background: rgba(218,41,28,0.15);
       border: 1px solid var(--border-red); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-display); font-size: 0.95rem; color: var(--red);
+      font-family: var(--font-display); font-size: 0.9rem; color: var(--red); flex-shrink: 0;
     }
-    .testi-name { font-weight: 600; font-size: 0.875rem; color: var(--white); }
-    .testi-loc  { font-size: 0.72rem; color: var(--gray); font-family: var(--font-cond); letter-spacing: 0.06em; text-transform: uppercase; }
+    .testi-name { font-weight: 600; font-size: 0.82rem; color: var(--white); }
+    .testi-loc  { font-size: 0.68rem; color: var(--gray); font-family: var(--font-cond); letter-spacing: 0.06em; text-transform: uppercase; }
 
-    /* ===== CTA BANNER ===== */
+    /* ===================================================
+       CTA BANNER — compact
+       =================================================== */
     .cta-banner {
       position: relative; overflow: hidden;
       background: linear-gradient(135deg, var(--red-deep) 0%, var(--red) 60%, #c0392b 100%);
-      border-radius: var(--radius-lg); padding: 3.5rem 2.5rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 2.5rem;
+      border-radius: var(--radius-lg); padding: 2.5rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
     }
     .cta-banner::before {
       content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,0,0,0.3) 0%, transparent 60%);
     }
     .cta-banner-bg-logo {
-      position: absolute; right: -30px; top: 50%; transform: translateY(-50%);
-      width: 340px; height: 340px; object-fit: contain; opacity: 0.08; pointer-events: none;
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      width: 280px; height: 280px; object-fit: contain; opacity: 0.08; pointer-events: none;
     }
     .cta-content { position: relative; z-index: 1; }
     .cta-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px; padding: 0.3rem 1rem;
+      display: inline-flex; align-items: center; gap: 6px; padding: 0.25rem 0.875rem;
       background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-      border-radius: var(--radius-pill); font-family: var(--font-cond); font-size: 0.72rem;
-      font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+      border-radius: var(--radius-pill); font-family: var(--font-cond); font-size: 0.68rem;
+      font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;
     }
-    .cta-eyebrow img { width: 14px; height: 14px; object-fit: contain; filter: brightness(0) invert(1); }
-    .cta-title { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 3.5rem); letter-spacing: 0.04em; line-height: 1; color: var(--white); margin-bottom: 0.75rem; }
-    .cta-desc { color: rgba(255,255,255,0.75); font-size: 0.95rem; line-height: 1.6; max-width: 440px; }
-    .cta-actions { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 0.75rem; flex-shrink: 0; min-width: 200px; }
+    .cta-eyebrow img { width: 12px; height: 12px; object-fit: contain; filter: brightness(0) invert(1); }
+    .cta-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3.5vw, 3rem); letter-spacing: 0.04em; line-height: 1; color: var(--white); margin-bottom: 0.6rem; }
+    .cta-desc { color: rgba(255,255,255,0.75); font-size: 0.875rem; line-height: 1.6; max-width: 420px; }
+    .cta-actions { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 0.6rem; flex-shrink: 0; min-width: 200px; }
     .btn-white {
-      background: var(--white); color: var(--red); padding: 1rem 2.5rem;
+      background: var(--white); color: var(--red); padding: 0.875rem 2rem;
       border-radius: var(--radius-pill); font-family: var(--font-cond); font-weight: 700;
-      font-size: 0.88rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+      font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
       transition: var(--transition); display: inline-block; text-align: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .btn-white:hover { background: var(--gold); color: var(--black); transform: translateY(-3px); }
+    .btn-white:hover { background: var(--gold); color: var(--black); transform: translateY(-2px); }
     .btn-white-outline {
-      background: transparent; color: var(--white); padding: 0.9rem 2.5rem;
+      background: transparent; color: var(--white); padding: 0.8rem 2rem;
       border-radius: var(--radius-pill); border: 2px solid rgba(255,255,255,0.4);
-      font-family: var(--font-cond); font-weight: 700; font-size: 0.88rem;
+      font-family: var(--font-cond); font-weight: 700; font-size: 0.85rem;
       letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
       transition: var(--transition); display: inline-block; text-align: center;
     }
     .btn-white-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); transform: translateY(-2px); }
 
-    /* ===== ARTICLES ===== */
-    .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    /* ===================================================
+       ARTICLES — 3 kolom compact
+       =================================================== */
+    .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .article-card {
       background: var(--surface-2); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden; transition: var(--transition); cursor: pointer;
     }
-    .article-card:hover { border-color: var(--border-red); transform: translateY(-5px); box-shadow: var(--shadow-red); }
+    .article-card:hover { border-color: var(--border-red); transform: translateY(-4px); box-shadow: var(--shadow-red); }
     .article-img {
       aspect-ratio: 16/9; background: var(--surface-3);
       position: relative; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .article-img img.art-mu-logo { width: 52px; height: 52px; object-fit: contain; opacity: 0.2; filter: drop-shadow(0 0 12px rgba(218,41,28,0.5)); transition: var(--transition); }
+    .article-img img.art-mu-logo { width: 48px; height: 48px; object-fit: contain; opacity: 0.2; filter: drop-shadow(0 0 10px rgba(218,41,28,0.5)); transition: var(--transition); }
     .article-card:hover .article-img img.art-mu-logo { opacity: 0.35; transform: scale(1.1); }
     .article-tag {
-      position: absolute; top: 0.75rem; left: 0.75rem;
-      padding: 0.2rem 0.65rem; background: var(--red); color: var(--white);
+      position: absolute; top: 0.6rem; left: 0.6rem;
+      padding: 0.15rem 0.55rem; background: var(--red); color: var(--white);
       border-radius: var(--radius-pill);
-      font-family: var(--font-cond); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      font-family: var(--font-cond); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
     }
-    .article-body { padding: 1.2rem; }
-    .article-meta { font-family: var(--font-cond); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.5rem; }
-    .article-title { font-weight: 700; font-size: 0.9rem; color: var(--white); line-height: 1.4; margin-bottom: 0.65rem; }
-    .article-excerpt { font-size: 0.82rem; color: var(--gray); line-height: 1.6; }
+    .article-body { padding: 1rem; }
+    .article-meta { font-family: var(--font-cond); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.4rem; }
+    .article-title { font-weight: 700; font-size: 0.875rem; color: var(--white); line-height: 1.4; margin-bottom: 0.5rem; }
+    .article-excerpt { font-size: 0.78rem; color: var(--gray); line-height: 1.55; }
 
-    /* ===== RESPONSIVE ===== */
+    /* ===================================================
+       BADGE VARIANTS
+       =================================================== */
+    .badge-red  { background: var(--red); color: #fff; }
+    .badge-gold { background: var(--gold); color: var(--black); }
+
+    /* ===================================================
+       FOOTER compact
+       =================================================== */
+    .footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2.5rem 1.5rem 1.5rem; }
+
+    /* ===================================================
+       RESPONSIVE
+       =================================================== */
     @media (max-width: 1100px) {
-      .hero-inner     { grid-template-columns: 1fr; padding: 3rem 1.5rem 2.5rem; }
+      .hero-inner     { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
       .hero-logo-col  { display: none; }
-      .club-inner     { grid-template-columns: 1fr; gap: 2rem; }
-      .club-logo-col  { width: 100%; height: 240px; }
+      .club-inner     { grid-template-columns: 1fr; gap: 1.5rem; }
+      .club-logo-col  { width: 100%; height: 200px; }
       .cat-grid       { grid-template-columns: 1fr 1fr; }
       .cat-card:first-child { grid-column: span 2; }
       .mock-products  { grid-template-columns: repeat(2, 1fr); }
       .why-grid, .testi-grid, .articles-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 768px) {
+      .hero { height: auto; min-height: 100dvh; }
       .stats-strip-inner { grid-template-columns: 1fr 1fr; }
-      .strip-item       { border-right: none; border-bottom: 1px solid var(--border); }
+      .strip-item { border-right: none; border-bottom: 1px solid var(--border); }
       .strip-item:nth-child(odd) { border-right: 1px solid var(--border); }
       .strip-item:last-child, .strip-item:nth-last-child(2):nth-child(odd) { border-bottom: none; }
-      .cat-grid         { grid-template-columns: 1fr 1fr; }
-      .cat-card:first-child { grid-column: span 2; min-height: 260px; }
-      .mock-products    { grid-template-columns: 1fr 1fr; }
+      .cat-grid       { grid-template-columns: 1fr 1fr; }
+      .cat-card:first-child { grid-column: span 2; min-height: 220px; }
+      .mock-products  { grid-template-columns: 1fr 1fr; }
       .why-grid, .testi-grid, .articles-grid { grid-template-columns: 1fr; }
-      .cta-banner       { flex-direction: column; padding: 2rem 1.5rem; }
-      .cta-actions      { width: 100%; }
+      .cta-banner     { flex-direction: column; padding: 1.75rem 1.25rem; }
+      .cta-actions    { width: 100%; }
       .btn-white, .btn-white-outline { width: 100%; }
-      .products-header  { flex-direction: column; align-items: flex-start; }
-      .hero-title { font-size: clamp(40px, 10vw, 72px); }
+      .products-header { flex-direction: column; align-items: flex-start; }
     }
     @media (max-width: 480px) {
-      .cat-grid  { grid-template-columns: 1fr; }
+      .cat-grid       { grid-template-columns: 1fr; }
       .cat-card:first-child { grid-column: span 1; }
-      .hero-cta  { flex-direction: column; }
-      .hero-trust { gap: 0.75rem; }
-      .mock-products { grid-template-columns: 1fr 1fr; gap: 0.875rem; }
-      .why-grid { grid-template-columns: 1fr; }
+      .hero-cta       { flex-direction: column; }
+      .mock-products  { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     }
   </style>
 </head>
 <body>
 
-<div class="top-stripe"></div>
+  <div class="top-stripe"></div>
 
-<!-- LOADING SCREEN -->
-<div id="loading-screen">
-  <div class="mu-logo-spotlight" style="margin-bottom:1.5rem">
-    <img class="mu-logo" style="width:80px;height:80px" src="assets/images/logomu.png" alt="Manchester United" />
-  </div>
-  <div class="loader-logo">RED<span>DEVILS</span> STORE</div>
-  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-</div>
-
-<!-- NAVBAR -->
-<header class="navbar" id="navbar">
-  <div class="navbar-inner">
-    <a href="index.html" class="nav-logo-wrap">
-      <img class="mu-logo-nav" src="assets/images/logomu.png" alt="MU" />
-      <span class="nav-logo-text">RED<span>DEVILS</span></span>
-    </a>
-    <nav class="nav-links">
-      <a href="#categories" class="nav-link">Produk</a>
-      <a href="#featured"   class="nav-link">Featured</a>
-      <a href="#club"       class="nav-link">The Club</a>
-      <a href="#articles"   class="nav-link">Artikel</a>
-      <a href="#footer"     class="nav-link">Kontak</a>
-    </nav>
-    <div class="nav-actions">
-      <a href="login.html"    class="btn-nav-login">Masuk</a>
-      <a href="register.html" class="btn-nav-register">Daftar</a>
-      <button class="hamburger" id="hamburger-btn" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+  <div id="loading-screen">
+    <div class="mu-logo-spotlight" style="margin-bottom:1.5rem">
+      <img class="mu-logo" style="width:80px;height:80px" src="assets/images/logomu.png" alt="Manchester United" />
     </div>
+    <div class="loader-logo">RED<span>DEVILS</span> STORE</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
   </div>
-</header>
 
-<!-- Mobile nav -->
-<div class="mobile-nav" id="mobile-nav">
-  <a href="#categories" class="nav-link">Produk</a>
-  <a href="#featured"   class="nav-link">Featured</a>
-  <a href="#club"       class="nav-link">The Club</a>
-  <a href="#articles"   class="nav-link">Artikel</a>
-  <a href="login.html"  class="nav-link">Masuk →</a>
-  <a href="register.html" class="nav-link">Daftar →</a>
-</div>
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="nav-logo-wrap">
+        <img class="mu-logo-nav" src="assets/images/logomu.png" alt="MU" />
+        <span class="nav-logo-text">RED<span>DEVILS</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#categories" class="nav-link">Kategori</a>
+        <a href="#featured" class="nav-link">Teaser Katalog</a>
+        <a href="#club" class="nav-link">The Club</a>
+          <a href="https://faatinsausanfirdau.wixsite.com/my-site-1" target="_blank" class="nav-link">Articles</a>
+        <a href="#footer" class="nav-link">Kontak</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-nav-login">Masuk</a>
+        <a href="register.html" class="btn-nav-register">Daftar Akun</a>
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-bg-grid"></div>
-  <div class="hero-inner">
-    <!-- Left: Copy -->
-    <div class="hero-content">
-      <div class="hero-eyebrow fade-in">
-        <img src="assets/images/logomu.png" alt="MU" />
-        Official Manchester United Merchandise
-      </div>
-      <h1 class="hero-title fade-in fade-in-delay-1">
-        GEAR UP<br/>
-        <span class="line-red">FOR THE</span><br/>
-        RED<span class="line-red">S</span>
-        <span class="line-gold">Glory Glory Man United</span>
-      </h1>
-      <p class="hero-desc fade-in fade-in-delay-2">
-        Temukan koleksi merchandise <strong>Manchester United</strong> terlengkap.
-        Jersey original, hoodie eksklusif, scarf, aksesoris — semua untuk fans
-        sejati Setan Merah di seluruh Indonesia.
-      </p>
-      <div class="hero-cta fade-in fade-in-delay-3">
-        <a href="login.html" class="btn btn-primary btn-lg">🛒 Belanja Sekarang</a>
-        <a href="#categories" class="btn btn-outline btn-lg">Lihat Koleksi ↓</a>
-      </div>
-      <div class="hero-trust fade-in fade-in-delay-4">
-        <div class="trust-item">
-          <img src="assets/images/logomu.png" alt="MU" />
-          <span>Merchandise Resmi</span>
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#categories" class="nav-link">Kategori</a>
+    <a href="#featured" class="nav-link">Teaser Katalog</a>
+    <a href="#club" class="nav-link">The Club</a>
+    <a href="https://faatinsausanfirdau.wixsite.com/my-site-1" target="_blank" class="nav-link">Articles</a>
+    <a href="login.html" class="nav-link">Masuk →</a>
+    <a href="register.html" class="nav-link">Daftar Akun →</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-bg-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow fade-in">
+          <img src="assets/images/logomu.png" alt="MU" /> Official Manchester United Fan Store
         </div>
-        <div class="trust-item">
-          <img src="assets/images/logomu.png" alt="MU" />
-          <span>Kirim Seluruh Indonesia</span>
+        <h1 class="hero-title fade-in fade-in-delay-1">
+          GEAR UP<br/>
+          <span class="line-red">FOR THE</span><br/>
+          RED<span class="line-red">S</span>
+          <span class="line-gold">Glory Glory Man United</span>
+        </h1>
+        <p class="hero-desc fade-in fade-in-delay-2">
+          Selamat datang di teater belanja Setan Merah! Akses ratusan merchandise premium <strong>Manchester United</strong> eksklusif hanya untuk member. Daftar gratis untuk membuka katalog dan mulai mengisi ruang ganti pribadimu.
+        </p>
+        <div class="hero-cta fade-in fade-in-delay-3">
+          <a href="register.html" class="btn btn-primary btn-lg">🔥 Daftar Akun Member</a>
+          <a href="#featured" class="btn btn-outline btn-lg">Intip Teaser Koleksi ↓</a>
         </div>
-        <div class="trust-item">
-          <img src="assets/images/logomu.png" alt="MU" />
-          <span>Garansi Originalitas</span>
+        <div class="hero-trust fade-in fade-in-delay-4">
+          <div class="trust-item">
+            <img src="assets/images/logomu.png" alt="MU" />
+            <span>Merchandise Resmi</span>
+          </div>
+          <div class="trust-item">
+            <img src="assets/images/logomu.png" alt="MU" />
+            <span>Kirim Seluruh Indonesia</span>
+          </div>
+          <div class="trust-item">
+            <img src="assets/images/logomu.png" alt="MU" />
+            <span>Akses Dashboard Khusus</span>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Right: Floating crest -->
-    <div class="hero-logo-col">
-      <div class="hero-logo-rings">
-        <div class="ring ring-1"></div>
-        <div class="ring ring-2"></div>
+      <div class="hero-logo-col">
+        <div class="hero-logo-rings">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+        </div>
+        <div class="mu-logo-spotlight">
+          <img class="mu-logo-hero" src="assets/images/logomu.png" alt="Manchester United Crest" />
+        </div>
       </div>
-      <div class="mu-logo-spotlight">
-        <img class="mu-logo-hero" src="assets/images/logomu.png" alt="Manchester United Crest" />
-      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- MARQUEE BAR -->
-<div class="marquee-bar">
-  <div class="marquee-inner">
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Manchester United FC</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">20× Premier League</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Theatre of Dreams</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Glory Glory Man United</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Merchandise Official</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Est. 1878 Newton Heath</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">3× UCL Champions</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Manchester United FC</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">20× Premier League</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Theatre of Dreams</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Glory Glory Man United</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Merchandise Official</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Est. 1878 Newton Heath</div>
-    <div class="marquee-item"><img src="assets/images/logomu.png" alt="">3× UCL Champions</div>
-  </div>
-</div>
-
-<!-- STATS STRIP -->
-<div class="stats-strip">
-  <div class="stats-strip-inner">
-    <div class="strip-item fade-in">
-      <div class="strip-num">500+</div>
-      <div class="strip-label">Produk Tersedia</div>
-    </div>
-    <div class="strip-item fade-in fade-in-delay-1">
-      <div class="strip-num">12K+</div>
-      <div class="strip-label">Pelanggan Setia</div>
-    </div>
-    <div class="strip-item fade-in fade-in-delay-2">
-      <div class="strip-num">100%</div>
-      <div class="strip-label">Original Resmi</div>
-    </div>
-    <div class="strip-item fade-in fade-in-delay-3">
-      <div class="strip-num">4.9★</div>
-      <div class="strip-label">Rating Kepuasan</div>
+  <!-- MARQUEE -->
+  <div class="marquee-bar">
+    <div class="marquee-inner">
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Manchester United FC</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">20× Premier League</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Theatre of Dreams</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Glory Glory Man United</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Merchandise Official</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Est. 1878 Newton Heath</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">3× UCL Champions</div>
+      <!-- duplikat untuk seamless loop -->
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Manchester United FC</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">20× Premier League</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Theatre of Dreams</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Glory Glory Man United</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Merchandise Official</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">Est. 1878 Newton Heath</div>
+      <div class="marquee-item"><img src="assets/images/logomu.png" alt="">3× UCL Champions</div>
     </div>
   </div>
-</div>
 
-<!-- CATEGORIES -->
-<section class="section" id="categories">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-eyebrow">
-        <img src="assets/images/logomu.png" alt="MU" />
-        Koleksi Lengkap
-      </span>
-      <h2 class="section-title">SHOP BY CATEGORY</h2>
-      <p class="section-subtitle">Dari jersey match day sampai streetwear harian — semua ada buat kamu, devil.</p>
-    </div>
-    <div class="cat-grid">
-      <div class="cat-card fade-in">
-        <img class="cat-img" src="assets/images/jersey.jpg" alt="Jersey" />
-        <div class="cat-overlay"></div>
-        <div class="cat-arrow">→</div>
-        <div class="cat-info">
-          <img class="cat-mu-logo" src="assets/images/logomu.png" alt="MU" />
-          <div class="cat-name">JERSEY KOLEKSI</div>
-          <div class="cat-count">120+ Produk · Home, Away & Third</div>
-        </div>
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-strip-inner">
+      <div class="strip-item fade-in">
+        <div class="strip-num">500+</div>
+        <div class="strip-label">Katalog Produk</div>
       </div>
-      
-    </br><div class=""></div>
-      <div class="cat-card fade-in fade-in-delay-1">
-        <img class="cat-img" src="assets/images/jaket.jpg" alt="Hoodie" />
-        <div class="cat-overlay"></div>
-        <div class="cat-arrow">→</div>
-        <div class="cat-info">
-          <img class="cat-mu-logo" src="assets/images/logomu.png" alt="MU" />
-          <div class="cat-name">HOODIE & JAKET</div>
-          <div class="cat-count">80+ Produk</div>
-        </div>
+      <div class="strip-item fade-in fade-in-delay-1">
+        <div class="strip-num">12K+</div>
+        <div class="strip-label">United Army Terdaftar</div>
       </div>
-            <div class="cat-card fade-in fade-in-delay-1">
-        <img class="cat-img" src="assets/images/kalung.jpg" alt="Kalung" />
-        <div class="cat-overlay"></div>
-        <div class="cat-arrow">→</div>
-        <div class="cat-info">
-          <img class="cat-mu-logo" src="assets/images/logomu.png" alt="MU" />
-          <div class="cat-name">KALUNG</div>
-          <div class="cat-count">80+ Produk</div>
-        </div>
+      <div class="strip-item fade-in fade-in-delay-2">
+        <div class="strip-num">100%</div>
+        <div class="strip-label">Kualitas Premium</div>
       </div>
-      <div class="cat-card fade-in fade-in-delay-2">
-        <img class="cat-img" src="assets/images/souvenir.jpg" alt="Aksesoris" />
-        <div class="cat-overlay"></div>
-        <div class="cat-arrow">→</div>
-        <div class="cat-info">
-          <img class="cat-mu-logo" src="assets/images/logomu.png" alt="MU" />
-          <div class="cat-name">AKSESORIS</div>
-          <div class="cat-count">200+ Item · Tumbler, pin & Lainnya</div>
-        </div>
-      </div>
-      <div class="cat-card fade-in fade-in-delay-3">
-        <img class="cat-img" src="assets/images/sepatu.jpg" alt="Footwear" />
-        <div class="cat-overlay"></div>
-        <div class="cat-arrow">→</div>
-        <div class="cat-info">
-          <img class="cat-mu-logo" src="assets/images/logomu.png" alt="MU" />
-          <div class="cat-name">FOOTWEAR</div>
-          <div class="cat-count">60+ Produk</div>
-        </div>
+      <div class="strip-item fade-in fade-in-delay-3">
+        <div class="strip-num">Terpusat</div>
+        <div class="strip-label">User Dashboard</div>
       </div>
     </div>
   </div>
-</section>
 
-<!-- FEATURED PRODUCTS -->
-<section class="section products-section" id="featured" style="padding-top:0">
-  <div class="container">
-    <div class="products-header fade-in">
-      <div class="products-header-left">
+  <!-- ===== CATEGORIES ===== -->
+  <section class="section" id="categories">
+    <div class="container">
+      <div class="section-header fade-in">
         <span class="section-eyebrow">
-          <img src="assets/images/logomu.png" alt="MU" />
-          Terlaris
+          <img src="assets/images/logomu.png" alt="MU" /> Eksplorasi Koleksi
         </span>
-        <h2 class="section-title" style="margin-bottom:0">PRODUK PILIHAN</h2>
+        <h2 class="section-title">SHOP BY CATEGORY</h2>
+        <p class="section-subtitle">Dari jersey match day hingga streetwear harian — semua siap kamu kunci di dashboard-mu.</p>
       </div>
-      <div class="products-tabs">
-        <button class="tab-btn active">Semua</button>
-        <button class="tab-btn">Jersey</button>
-        <button class="tab-btn">Hoodie</button>
-        <button class="tab-btn">Aksesoris</button>
-      </div>
-    </div>
-    <div class="mock-products">
-      <div class="mock-product fade-in">
-        <div class="mock-product-img">
-          <img class="cat-img" src="assets/images/sepatu.jpg" alt="Footwear" />
-          <span class="product-badge">NEW</span>
-          <div class="quick-add-overlay">+ Tambah ke Keranjang</div>
-        </div>
-        <div class="mock-product-info">
-          <div class="mock-product-cat">Sepatu · Home</div>
-          <div class="mock-product-name">Sepatu Home 2024/25 — Player Edition</div>
-          <div class="mock-product-bottom">
-            <div><span class="mock-product-old">Rp 4.200.000</span><span class="mock-product-price">Rp 2.999.000</span></div>
-            <button class="btn-add-small">+</button>
+      <div class="cat-grid">
+        <div class="cat-card fade-in" onclick="window.location.href='register.html'">
+          <img class="cat-img" src="assets/images/streatwer.jpg" alt="Jersey" />
+          <div class="cat-overlay"></div>
+          <div class="cat-arrow">🔒</div>
+          <div class="cat-info">
+            <img class="cat-mu-logo" src="assets/images/logomu.png" alt="MU" />
+            <div class="cat-name">JERSEY KIT</div>
+            <div class="cat-count">Daftar untuk akses</div>
           </div>
         </div>
-      </div>
-      <div class="mock-product fade-in fade-in-delay-1">
-        <div class="mock-product-img">
-          <img class="cat-img" src="assets/images/jaket.jpg" alt="Jaket" />
-          <span class="product-badge" style="background:#FBE122;color:#000">HOT</span>
-          <div class="quick-add-overlay">+ Tambah ke Keranjang</div>
-        </div>
-        <div class="mock-product-info">
-          <div class="mock-product-cat">Hoodie · Jaket</div>
-          <div class="mock-product-name">Hoodie Jaket MU — Red Edition</div>
-          <div class="mock-product-bottom">
-            <span class="mock-product-price">Rp 649.000</span>
-            <button class="btn-add-small">+</button>
+        <div class="cat-card fade-in" onclick="window.location.href='register.html'">
+          <img class="cat-img" src="assets/images/sepatu.jpg" alt="Lifestyle" />
+          <div class="cat-overlay"></div>
+          <div class="cat-arrow">🔒</div>
+          <div class="cat-info">
+            <div class="cat-name">STREETWEAR</div>
+            <div class="cat-count">Daftar untuk akses</div>
           </div>
         </div>
-      </div>
-      <div class="mock-product fade-in fade-in-delay-2">
-        <div class="mock-product-img">
-          <img class="cat-img" src="assets/images/kalung.jpg" alt="Kalung" />
-          <div class="quick-add-overlay">+ Tambah ke Keranjang</div>
-        </div>
-        <div class="mock-product-info">
-          <div class="mock-product-cat">Aksesoris · Kalung</div>
-          <div class="mock-product-name">Kalung Official — Glory Glory</div>
-          <div class="mock-product-bottom">
-            <span class="mock-product-price">Rp 249.000</span>
-            <button class="btn-add-small">+</button>
+        <div class="cat-card fade-in" onclick="window.location.href='register.html'">
+          <img class="cat-img" src="assets/images/souvenir.jpg" alt="Accessories" />
+          <div class="cat-overlay"></div>
+          <div class="cat-arrow">🔒</div>
+          <div class="cat-info">
+            <div class="cat-name">ACCESSORIES</div>
+            <div class="cat-count">Daftar untuk akses</div>
           </div>
         </div>
-      </div>
-      <div class="mock-product fade-in fade-in-delay-3">
-        <div class="mock-product-img">
-          <img class="cat-img" src="assets/images/jersey.jpg" alt="Jersey" />
-          <span class="product-badge">SALE</span>
-          <div class="quick-add-overlay">+ Tambah ke Keranjang</div>
-        </div>
-        <div class="mock-product-info">
-          <div class="mock-product-cat">Jersey · Away</div>
-          <div class="mock-product-name">Jersey Away 2024/25 — Fan Version</div>
-          <div class="mock-product-bottom">
-            <div><span class="mock-product-old">Rp 850.000</span><span class="mock-product-price">Rp 599.000</span></div>
-            <button class="btn-add-small">+</button>
+        <div class="cat-card fade-in" onclick="window.location.href='register.html'">
+          <img class="cat-img" src="assets/images/retro.jpg" alt="Retro" />
+          <div class="cat-overlay"></div>
+          <div class="cat-arrow">🔒</div>
+          <div class="cat-info">
+            <div class="cat-name">RETRO CLASSICS</div>
+            <div class="cat-count">Daftar untuk akses</div>
           </div>
         </div>
       </div>
     </div>
-    <div style="text-align:center;margin-top:2.5rem" class="fade-in">
-      <a href="register.html" class="btn btn-outline btn-lg">Lihat Semua Produk →</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- THE CLUB -->
-<section class="section club-section" id="club">
-  <div class="container">
-    <div class="club-inner">
-      <div class="club-logo-col">
-        <div class="ring ring-1"></div>
-        <div class="ring ring-2"></div>
-        <img class="club-logo-img" src="assets/images/logomu.png" alt="Manchester United" />
+  <!-- ===== FEATURED PRODUCTS ===== -->
+  <section class="section section-alt" id="featured">
+    <div class="container">
+      <div class="products-header fade-in">
+        <div>
+          <span class="section-eyebrow">
+            <img src="assets/images/logomu.png" alt="MU" /> Pratinjau Eksklusif
+          </span>
+          <h2 class="section-title">EXCLUSIVE TEASER</h2>
+        </div>
       </div>
-      <div class="club-info fade-in">
-        <div class="club-founded">⚽ Berdiri 1878 · Newton Heath · Manchester, England</div>
-        <h2 class="club-title">MANCHESTER<br/>UNITED FC</h2>
-        <p class="club-subtitle">
-          Klub sepak bola paling ikonik di dunia. Old Trafford — the Theatre of Dreams.
-          RedDevils Store hadir untuk mempertemukan kamu dengan merchandise resmi MU,
-          dikelola dengan cinta untuk fans sejati di seluruh Indonesia.
-        </p>
-        <div class="club-stats">
-          <div class="club-stat">
-            <div class="club-stat-num">20×</div>
-            <div class="club-stat-label">Premier League</div>
+      <div class="mock-products">
+        <div class="mock-product" onclick="window.location.href='register.html'">
+          <div class="mock-product-img">
+            <img class="cat-img" src="assets/images/homejersey.jpg" alt="Home Jersey" />
+            <span class="product-badge badge-red">PREMIUM</span>
+            <div class="quick-add-overlay">🔒 LOGIN UNTUK BELI</div>
           </div>
-          <div class="club-stat">
-            <div class="club-stat-num">3×</div>
-            <div class="club-stat-label">Champions League</div>
-          </div>
-          <div class="club-stat">
-            <div class="club-stat-num">1.1B</div>
-            <div class="club-stat-label">Fans di Dunia</div>
-          </div>
-          <div class="club-stat">
-            <div class="club-stat-num">1878</div>
-            <div class="club-stat-label">Tahun Berdiri</div>
+          <div class="mock-product-info">
+            <div class="mock-product-cat">JERSEY KIT</div>
+            <div class="mock-product-name">Manchester United Home Shirt 2026/27</div>
+            <div class="mock-product-bottom">
+              <div class="mock-product-price">Rp 450.000 [Khusus Member]</div>
+            </div>
           </div>
         </div>
-        <a href="register.html" class="btn btn-primary btn-lg">Gabung Red Army →</a>
+        <div class="mock-product" onclick="window.location.href='register.html'">
+          <div class="mock-product-img">
+            <img class="cat-img" src="assets/images/hoodie.jpg" alt="Hoodie" />
+            <span class="product-badge badge-gold">LIMITLESS</span>
+            <div class="quick-add-overlay">🔒 LOGIN UNTUK BELI</div>
+          </div>
+          <div class="mock-product-info">
+            <div class="mock-product-cat">STREETWEAR</div>
+            <div class="mock-product-name">Red Devils Heritage Oversized Hoodie</div>
+            <div class="mock-product-bottom">
+              <div class="mock-product-price">Rp 750.000 [Khusus Member]</div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-product" onclick="window.location.href='register.html'">
+          <div class="mock-product-img">
+            <img class="cat-img" src="assets/images/silkscarf.jpg" alt="Scarf" />
+            <div class="quick-add-overlay">🔒 LOGIN UNTUK BELI</div>
+          </div>
+          <div class="mock-product-info">
+            <div class="mock-product-cat">ACCESSORIES</div>
+            <div class="mock-product-name">Old Trafford Stadium Silk Scarf</div>
+            <div class="mock-product-bottom">
+              <div class="mock-product-price">Rp 250.000 [Khusus Member]</div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-product" onclick="window.location.href='register.html'">
+          <div class="mock-product-img">
+            <img class="cat-img" src="assets/images/winnerjersey.jpg" alt="Retro Jersey" />
+            <span class="product-badge badge-red">RETRO</span>
+            <div class="quick-add-overlay">🔒 LOGIN UNTUK BELI</div>
+          </div>
+          <div class="mock-product-info">
+            <div class="mock-product-cat">RETRO CLASSICS</div>
+            <div class="mock-product-name">Sharp 1999 Treble Winners Jersey</div>
+            <div class="mock-product-bottom">
+              <div class="mock-product-price">Rp 650.000 [Khusus Member]</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- WHY BUY -->
-<section class="section">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-eyebrow"><img src="assets/images/logomu.png" alt="MU" />Kenapa Kami?</span>
-      <h2 class="section-title">BELANJA LEBIH NYAMAN</h2>
-      <p class="section-subtitle">RedDevils Store bukan sekadar toko — ini rumah bagi setiap fans MU di Indonesia.</p>
-    </div>
-    <div class="why-grid">
-      <div class="why-card fade-in">
-        <div class="why-icon"><img src="assets/images/logomu.png" alt="MU" /></div>
-        <div class="why-title">100% ORIGINAL</div>
-        <p class="why-desc">Semua produk bersumber langsung dari produsen resmi. Setiap item dilengkapi tag keaslian dan sertifikat.</p>
-      </div>
-      <div class="why-card fade-in fade-in-delay-1">
-        <div class="why-icon"><span class="why-icon-emoji">🚚</span></div>
-        <div class="why-title">GRATIS ONGKIR</div>
-        <p class="why-desc">Gratis ongkos kirim ke seluruh Indonesia untuk setiap pembelian di atas Rp 500.000. Dikirim 1–3 hari kerja.</p>
-      </div>
-      <div class="why-card fade-in fade-in-delay-2">
-        <div class="why-icon"><span class="why-icon-emoji">🔄</span></div>
-        <div class="why-title">RETUR MUDAH</div>
-        <p class="why-desc">Tidak puas? Return dalam 30 hari tanpa pertanyaan. Proses pengembalian dana cepat maksimal 3 hari kerja.</p>
-      </div>
-      <div class="why-card fade-in">
-        <div class="why-icon"><span class="why-icon-emoji">💳</span></div>
-        <div class="why-title">BAYAR FLEKSIBEL</div>
-        <p class="why-desc">Transfer bank, e-wallet, QRIS, kartu kredit, hingga cicilan 0% tersedia. Bayar sesuai kemampuanmu.</p>
-      </div>
-      <div class="why-card fade-in fade-in-delay-1">
-        <div class="why-icon"><img src="assets/images/logomu.png" alt="MU" /></div>
-        <div class="why-title">EXCLUSIVE DROPS</div>
-        <p class="why-desc">Dapatkan akses pertama ke koleksi limited edition, jersey musim baru, dan merchandise eksklusif khusus member.</p>
-      </div>
-      <div class="why-card fade-in fade-in-delay-2">
-        <div class="why-icon"><span class="why-icon-emoji">🎁</span></div>
-        <div class="why-title">POIN REWARD</div>
-        <p class="why-desc">Kumpulkan poin setiap belanja dan tukarkan dengan diskon. Semakin sering belanja, semakin besar hadiahnya.</p>
+  <!-- ===== THE CLUB ===== -->
+  <section class="section club-section" id="club">
+    <div class="container">
+      <div class="club-inner">
+        <div class="club-logo-col fade-in">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <img class="club-logo-img" src="assets/images/logomu.png" alt="MU Crest" />
+        </div>
+        <div class="club-content fade-in fade-in-delay-1">
+          <div class="club-founded">ESTABLISHED 1878</div>
+          <h2 class="club-title">THE GREATEST CLUB IN THE WORLD</h2>
+          <p class="club-subtitle">
+            Mendukung Manchester United bukan sekadar hobi, ini adalah jalan hidup. RedDevils Store hadir untuk memastikan kecintaanmu didukung dengan merchandise berkualitas tinggi yang layak bersanding dengan sejarah besar klub.
+          </p>
+          <div class="club-stats">
+            <div class="club-stat">
+              <div class="club-stat-num">20×</div>
+              <div class="club-stat-label">Premier League</div>
+            </div>
+            <div class="club-stat">
+              <div class="club-stat-num">3×</div>
+              <div class="club-stat-label">Champions League</div>
+            </div>
+            <div class="club-stat">
+              <div class="club-stat-num">1.1B</div>
+              <div class="club-stat-label">Fans di Dunia</div>
+            </div>
+            <div class="club-stat">
+              <div class="club-stat-num">1878</div>
+              <div class="club-stat-label">Tahun Berdiri</div>
+            </div>
+          </div>
+          <a href="register.html" class="btn btn-primary">Daftar Sekarang →</a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- TESTIMONIALS -->
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-eyebrow"><img src="assets/images/logomu.png" alt="MU" />Kata Mereka</span>
-      <h2 class="section-title">12.000+ DEVIL SUDAH BELANJA</h2>
-    </div>
-    <div class="testi-grid">
-      <div class="testi-card fade-in">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Jersey home 2024-nya mantap banget! Jahitan rapi, bahan adem, persis sama yang dipakai di Old Trafford. Udah jadi langganan tetap di sini."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">R</div>
-          <div><div class="testi-name">Rizky Pratama</div><div class="testi-loc">Jakarta · Beli 6× 🛒</div></div>
-        </div>
+  <!-- ===== WHY BUY ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">
+          <img src="assets/images/logomu.png" alt="MU" /> Ekosistem Belanja
+        </span>
+        <h2 class="section-title">KENAPA BELANJA DI SINI?</h2>
+        <p class="section-subtitle">RedDevils Store bukan sekadar toko — ini rumah bagi setiap fans MU di Indonesia.</p>
       </div>
-      <div class="testi-card fade-in fade-in-delay-1">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Nonton live di Old Trafford pake scarf dari sini, keren banget! Kualitas rajutannya tebal dan warm. Recommended banget buat sesama Red Army."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">A</div>
-          <div><div class="testi-name">Andi Kurniawan</div><div class="testi-loc">Surabaya · Beli 12× 🛒</div></div>
+      <div class="why-grid">
+        <div class="why-card fade-in">
+          <div class="why-icon"><span class="why-icon-emoji">🛡️</span></div>
+          <h3 class="why-title">Dashboard Personal</h3>
+          <p class="why-desc">Pantau histori pembelian, klaim kupon diskon member, dan lacak pengiriman jersi favoritmu secara terpusat dalam satu halaman akun.</p>
         </div>
-      </div>
-      <div class="testi-card fade-in fade-in-delay-2">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Paling suka sama systemnya — bisa lacak order, history transaksi jelas, dan CS responsif banget. Hoodie MU yang kubeli udah 3 musim masih awet!"</p>
-        <div class="testi-author">
-          <div class="testi-avatar">S</div>
-          <div><div class="testi-name">Siti Rahayu</div><div class="testi-loc">Bandung · Beli 9× 🛒</div></div>
+        <div class="why-card fade-in fade-in-delay-1">
+          <div class="why-icon"><span class="why-icon-emoji">💎</span></div>
+          <h3 class="why-title">Harga Spesial Member</h3>
+          <p class="why-desc">Sistem tertutup menjamin potongan harga spesial yang aman dan eksklusif bagi setiap fans yang terdaftar resmi di sistem kami.</p>
+        </div>
+        <div class="why-card fade-in fade-in-delay-2">
+          <div class="why-icon"><span class="why-icon-emoji">⚡</span></div>
+          <h3 class="why-title">Tanpa Ribet Iklan</h3>
+          <p class="why-desc">Setelah kamu login, dashboard belanja didesain bersih, fokus, dan super cepat untuk memilih ukuran pakaian tanpa distraksi.</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CTA BANNER -->
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <div class="cta-banner fade-in">
-      <img class="cta-banner-bg-logo" src="assets/images/logomu.png" alt="" />
-      <div class="cta-content">
-        <div class="cta-eyebrow"><img src="assets/images/logomu.png" alt="MU" />Join The Red Army</div>
-        <h2 class="cta-title">SIAP JADI BAGIAN<br/>DARI RED ARMY?</h2>
-        <p class="cta-desc">Daftar sekarang dan dapatkan <strong style="color:var(--gold)">diskon 15%</strong> untuk pembelian pertamamu + akses eksklusif ke koleksi limited edition sebelum dijual ke publik.</p>
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">
+          <img src="assets/images/logomu.png" alt="MU" /> Suara United Army
+        </span>
+        <h2 class="section-title">WHAT THE DEVILS SAY</h2>
       </div>
-      <div class="cta-actions">
-        <a href="login.html" class="btn-white">🛒 Mulai Belanja</a>
-        <a href="register.html" class="btn-white-outline">Daftar Gratis →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ARTICLES -->
-<section class="section" id="articles">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-eyebrow"><img src="assets/images/logomu.png" alt="MU" />Berita Terkini</span>
-      <h2 class="section-title">ARTIKEL & NEWS</h2>
-      <p class="section-subtitle">Update terbaru soal Manchester United — dari hasil pertandingan, transfer, sampai lifestyle fans MU.</p>
-    </div>
-    <div class="articles-grid">
-      <div class="article-card fade-in">
-        <div class="article-img">
-          <img class="art-mu-logo" src="assets/images/logomu.png" alt="" />
-          <span class="article-tag">Match Report</span>
+      <div class="testi-grid">
+        <div class="testi-card fade-in">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Awalnya bingung kok harus daftar dulu buat lihat katalog, pas udah masuk ternyata dashboard belanjanya keren banget! Jersinya pas dipake nobar mantap abis!"</p>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <div class="testi-name">Rian J.</div>
+              <div class="testi-loc">MUFC Indonesia (Jakarta)</div>
+            </div>
+          </div>
         </div>
-        <div class="article-body">
-          <div class="article-meta">28 Mei 2026 · 3 menit baca</div>
-          <div class="article-title">United Menang Dramatis 2–1 di Old Trafford, Rasmus Hojlund Jadi Pahlawan</div>
-          <p class="article-excerpt">Gol injury time Hojlund membawa The Reds pulang dengan tiga poin yang krusial untuk perburuan gelar musim ini...</p>
+        <div class="testi-card fade-in fade-in-delay-1">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Suka banget sama konsep dashboard belanjanya yang bersih. Pelacakan resi pengirimannya langsung kelihatan pas beres transaksi. GGMU!"</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div>
+              <div class="testi-name">Andini P.</div>
+              <div class="testi-loc">Devil Girls (Bandung)</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="article-card fade-in fade-in-delay-1">
-        <div class="article-img">
-          <img class="art-mu-logo" src="assets/images/logomu.png" alt="" />
-          <span class="article-tag">Transfer</span>
-        </div>
-        <div class="article-body">
-          <div class="article-meta">25 Mei 2026 · 4 menit baca</div>
-          <div class="article-title">Rumor Transfer Musim Panas: Siapa Saja Target Utama Manchester United 2026?</div>
-          <p class="article-excerpt">Bursa transfer musim panas semakin panas. Laporan terbaru menyebut United siapkan dana besar untuk rekrutan bintang baru...</p>
-        </div>
-      </div>
-      <div class="article-card fade-in fade-in-delay-2">
-        <div class="article-img">
-          <img class="art-mu-logo" src="assets/images/logomu.png" alt="" />
-          <span class="article-tag">Lifestyle</span>
-        </div>
-        <div class="article-body">
-          <div class="article-meta">20 Mei 2026 · 2 menit baca</div>
-          <div class="article-title">5 Cara Styling Jersey MU yang Kece untuk Daily Wear — Bukan Cuma Nonton Bola</div>
-          <p class="article-excerpt">Jersey Manchester United bukan hanya untuk matchday. Begini cara fans-fans stylish memadupadankannya untuk outfit harian...</p>
+        <div class="testi-card fade-in fade-in-delay-2">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Bahan hoodie-nya tebal dan sablonnya rapi. Proses daftarnya juga gampang banget nggak bertele-tele. Rekomendasi buat kolektor merchandise MU!"</p>
+          <div class="testi-author">
+            <div class="testi-avatar">G</div>
+            <div>
+              <div class="testi-name">Gilang K.</div>
+              <div class="testi-loc">United Army (Surabaya)</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div style="text-align:center;margin-top:2.5rem" class="fade-in">
-      <a href="#" class="btn btn-outline btn-lg">Baca Semua Artikel →</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- FOOTER -->
-<footer class="footer" id="footer">
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo-wrap">
-          <img src="assets/images/logomu.png" alt="MU" />
-          <span class="footer-brand-logo">RED<span>DEVILS</span></span>
+  <!-- ===== CTA BANNER ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <img class="cta-banner-bg-logo" src="assets/images/logomu.png" alt="MU Crest" />
+        <div class="cta-content">
+          <div class="cta-eyebrow">
+            <img src="assets/images/logomu.png" alt="MU" /> RED DEVILS MEMBERSHIP
+          </div>
+          <h2 class="cta-title">MASUK KE RUANG GANTI SEKARANG</h2>
+          <p class="cta-desc">
+            Buat akun member gratis hari ini untuk membuka harga rahasia, melihat detail ratusan merchandise, dan mengklaim pengalaman belanja eksklusif langsung dari dashboard pribadimu.
+          </p>
         </div>
-        <p class="footer-brand-desc">
-          Platform merchandise Manchester United modern untuk fans sejati Setan Merah Indonesia.
-          Glory Glory Man United — selamanya. 🔴😈
-        </p>
-        <div class="footer-socials">
-          <a href="#" class="footer-social" title="Instagram">📸</a>
-          <a href="#" class="footer-social" title="Twitter/X">✖</a>
-          <a href="#" class="footer-social" title="TikTok">🎵</a>
-          <a href="#" class="footer-social" title="YouTube">▶</a>
-        </div>
-      </div>
-    </br></div>
-      <div class="footer-col">
-        <h4>Platform</h4>
-        <div class="footer-links">
-          <a href="#categories">Semua Produk</a>
-          <a href="#featured">Terlaris</a>
-          <a href="#club">Tentang MU</a>
-          <a href="#articles">Artikel</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Bantuan</h4>
-        <div class="footer-links">
-          <a href="#">Cara Pesan</a>
-          <a href="#">Lacak Pesanan</a>
-          <a href="#">Kebijakan Retur</a>
-          <a href="#">FAQ</a>
-          <a href="#">Hubungi Kami</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Akun</h4>
-        <div class="footer-links">
-          <a href="login.html">Masuk</a>
-          <a href="register.html">Daftar</a>
-          <a href="#">Poin Reward</a>
-          <a href="#">Wishlist</a>
+        <div class="cta-actions">
+          <a href="register.html" class="btn-white">Buat Akun Member (Gratis)</a>
+          <a href="login.html" class="btn-white-outline">Sudah Punya Akun? Masuk</a>
         </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2026 RedDevils Store. All rights reserved.</p>
-      <p>Built with ❤️ for Manchester United fans · GGMU 🔴</p>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logomu.png" alt="MU" />
+            <span class="footer-brand-logo">RED<span>DEVILS</span></span>
+          </div>
+          <p class="footer-brand-desc">
+            Platform merchandise Manchester United modern untuk fans sejati Setan Merah Indonesia.
+            Glory Glory Man United — selamanya. 🔴😈
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social" title="Instagram">📸</a>
+            <a href="#" class="footer-social" title="Twitter/X">✖</a>
+            <a href="#" class="footer-social" title="TikTok">🎵</a>
+            <a href="#" class="footer-social" title="YouTube">▶</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <div class="footer-links">
+            <a href="#categories">Semua Produk</a>
+            <a href="#featured">Terlaris</a>
+            <a href="#club">Tentang MU</a>
+            <a href="#articles">Artikel</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Bantuan</h4>
+          <div class="footer-links">
+            <a href="#">FAQ</a>
+            <a href="#">Hubungi Kami</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Akun</h4>
+          <div class="footer-links">
+            <a href="login.html">Masuk</a>
+            <a href="register.html">Daftar</a>
+            <a href="#">Poin Reward</a>
+            <a href="#">Wishlist</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 RedDevils Store. All rights reserved.</p>
+        <p>Built with ❤️ for Manchester United fans · GGMU 🔴</p>
+      </div>
     </div>
-  </div>
-</footer>
+  </footer>
 
-<!-- SCRIPTS -->
-<script src="js/main.js"></script>
-<script>
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      const ls = document.getElementById('loading-screen');
-      if (ls) { ls.classList.add('hidden'); setTimeout(() => ls.style.display = 'none', 500); }
-    }, 1800);
-  });
-
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  });
-
-  const btn = document.getElementById('hamburger-btn');
-  const mNav = document.getElementById('mobile-nav');
-  btn?.addEventListener('click', () => {
-    btn.classList.toggle('active');
-    mNav.classList.toggle('open');
-  });
-  mNav?.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
-    btn.classList.remove('active');
-    mNav.classList.remove('open');
-  }));
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  <script src="js/main.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const ls = document.getElementById('loading-screen');
+        if (ls) { ls.classList.add('hidden'); setTimeout(() => ls.style.display = 'none', 500); }
+      }, 1800);
     });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
-  });
 
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', () => {
-      mNav?.classList.remove('open');
-      btn?.classList.remove('active');
+    const btn = document.getElementById('hamburger-btn');
+    const mNav = document.getElementById('mobile-nav');
+    btn?.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      mNav.classList.toggle('open');
     });
-  });
-</script>
+    mNav?.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
+      btn.classList.remove('active');
+      mNav.classList.remove('open');
+    }));
 
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', () => {
+        mNav?.classList.remove('open');
+        btn?.classList.remove('active');
+      });
+    });
+  </script>
 </body>
 </html>
