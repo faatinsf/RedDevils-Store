@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users - Admin</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-logo">
+      <img src="assets/images/logomu.png" alt="MU">
+      <span>RED<b>DEVILS</b></span>
+    </div>
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Main</div>
+      <a href="admin-dashboard.html" class="admin-nav-link">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+    </div>
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Management</div>
+      <a href="manage-products.html" class="admin-nav-link">
+        <span class="nav-icon">👕</span> Products
+      </a>
+      <a href="manage-transactions.html" class="admin-nav-link">
+        <span class="nav-icon">🧾</span> Transactions
+      </a>
+      <a href="manage-users.html" class="admin-nav-link active">
+        <span class="nav-icon">👥</span> Users
+      </a>
+      <a href="manage-articles.html" class="admin-nav-link">
+        <span class="nav-icon">📝</span> Articles
+      </a>
+    </div>
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Store</div>
+      <a href="user-dashboard.html" class="admin-nav-link" target="_blank">
+        <span class="nav-icon">🏪</span> View Store
+      </a>
+    </div>
+    <div class="admin-sidebar-footer">
+      <button onclick="logout()" class="btn btn-ghost" style="width:100%;justify-content:center;">
+        🚪 Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <button id="sidebarToggle"
+      style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;
+             padding:0.5rem 0.75rem;border-radius:8px;cursor:pointer;margin-bottom:1rem;">☰</button>
+
+    <div class="admin-page-header">
+      <div class="eyebrow">ADMIN PANEL</div>
+      <h1>MANAGE USERS</h1>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h3>All Users</h3>
+        <div class="admin-toolbar">
+          <input type="text" id="searchUser" class="admin-search" placeholder="🔍 Search name / email...">
+        </div>
+      </div>
+      <div class="admin-card-body">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="userTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  const toggle  = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('adminSidebar');
+  toggle?.addEventListener('click', () => sidebar.classList.toggle('open'));
+  function checkMobile() {
+    if (toggle) toggle.style.display = window.innerWidth <= 900 ? 'block' : 'none';
+  }
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+</script>
+
+</body>
+</html>

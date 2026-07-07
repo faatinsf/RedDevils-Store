@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction History - RedDevils Store</title>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+
+    <a href="user-dashboard.html" class="nav-logo-wrap">
+      <img class="mu-logo-nav" src="assets/images/logomu.png" alt="MU" />
+      <span class="nav-logo-text">RED<span>DEVILS</span></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="user-dashboard.html" class="nav-link">Home</a>
+      <a href="products.html" class="nav-link">Products</a>
+      <a href="cart.html" class="nav-link">Cart</a>
+      <a href="history.html" class="nav-link active">History</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="cart.html" style="position:relative;display:flex;align-items:center;
+         padding:0.4rem 0.8rem;color:var(--gray-light);font-size:1.1rem;" title="Cart">
+        🛒
+        <span class="cart-badge" id="cartBadgeCount"
+              style="position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;
+                     border-radius:50%;width:16px;height:16px;font-size:0.6rem;font-weight:700;
+                     display:flex;align-items:center;justify-content:center;">0</span>
+      </a>
+      <button class="btn-nav-login" onclick="logout()" style="cursor:pointer;">Logout</button>
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="user-dashboard.html" class="nav-link">Home</a>
+  <a href="products.html" class="nav-link">Products</a>
+  <a href="cart.html" class="nav-link">Cart</a>
+  <a href="history.html" class="nav-link">History</a>
+</div>
+
+<section class="page-header">
+  <div class="breadcrumb">
+    <a href="user-dashboard.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>Transaction History</span>
+  </div>
+  <h1 class="page-title">TRANSACTION HISTORY</h1>
+  <p class="page-subtitle">Track your recent orders.</p>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width:760px;">
+    <div id="historyContainer"></div>
+  </div>
+</section>
+
+<script src="js/main.js"></script>
+<script src="js/history.js"></script>
+
+</body>
+</html>

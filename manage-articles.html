@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Articles - Admin</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <style>
+    .article-list { display: flex; flex-direction: column; gap: 1rem; }
+
+    .article-row {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 1.25rem;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .article-row:hover { border-color: #2a2a2a; }
+
+    .article-num {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(218,41,28,0.1);
+      border: 1px solid rgba(218,41,28,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display, sans-serif);
+      font-size: 1rem; color: var(--red, #DA291C);
+      flex-shrink: 0;
+    }
+
+    .article-meta { min-width: 0; }
+    .article-title {
+      color: #fff; font-size: 0.95rem; font-weight: 700;
+      margin-bottom: 0.3rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .article-info {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.75rem; color: #555; flex-wrap: wrap;
+    }
+    .cat-pill {
+      padding: 0.15rem 0.55rem; border-radius: 999px;
+      background: rgba(251,225,34,0.08);
+      border: 1px solid rgba(251,225,34,0.2);
+      color: #FBE122; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .article-excerpt {
+      color: #555; font-size: 0.78rem; margin-top: 0.35rem;
+      overflow: hidden; display: -webkit-box;
+      -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    }
+
+    .article-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+    .btn-edit-art {
+      padding: 0.35rem 0.8rem; background: #1a1a1a;
+      border: 1px solid #2a2a2a; color: #fff; border-radius: 7px;
+      cursor: pointer; font-size: 0.8rem; font-weight: 600;
+    }
+    .btn-edit-art:hover { border-color: #444; }
+    .btn-del-art {
+      padding: 0.35rem 0.65rem;
+      background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+      color: #ef4444; border-radius: 7px; cursor: pointer; font-size: 0.8rem;
+    }
+    .btn-del-art:hover { background: rgba(239,68,68,0.16); }
+
+    .dot-live  { color: #22c55e; }
+    .dot-draft { color: #888; }
+
+    .article-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem; margin-bottom: 1.5rem;
+    }
+    .art-stat {
+      background: #111; border: 1px solid #1e1e1e;
+      border-radius: 10px; padding: 1rem 1.25rem; text-align: center;
+    }
+    .art-stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
+    .art-stat-lbl { font-size: 0.7rem; color: #555; text-transform: uppercase;
+      letter-spacing: 0.1em; font-weight: 700; margin-top: 0.2rem; }
+
+    .empty-articles {
+      text-align: center; padding: 3rem 2rem;
+      border: 1px dashed #222; border-radius: 12px; color: #555;
+    }
+
+    /* MODAL */
+    #articleModal {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.82);
+      align-items: flex-start; justify-content: center;
+      padding: 2rem 1rem; overflow-y: auto;
+    }
+    .cms-modal {
+      background: #0f0f0f; border: 1px solid #222; border-radius: 16px;
+      width: 100%; max-width: 680px; padding: 2rem; position: relative;
+    }
+    .cms-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+    .cms-modal-header h3 { color: #fff; font-size: 1.1rem; margin: 0; }
+    .cms-close {
+      background: #1a1a1a; border: 1px solid #2a2a2a; color: #888;
+      width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+      font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    }
+    .cms-close:hover { color: #fff; }
+    .cms-fg { margin-bottom: 1.1rem; }
+    .cms-lbl {
+      display: block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #555; margin-bottom: 0.4rem;
+    }
+    .cms-inp, .cms-sel, .cms-ta {
+      width: 100%; background: #161616; border: 1px solid #242424;
+      color: #fff; padding: 0.6rem 0.85rem; border-radius: 8px;
+      font-size: 0.88rem; outline: none; transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .cms-inp:focus, .cms-sel:focus, .cms-ta:focus { border-color: var(--red, #DA291C); }
+    .cms-ta { resize: vertical; min-height: 110px; line-height: 1.65; }
+    .cms-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .cms-ccount { text-align: right; font-size: 0.7rem; color: #444; margin-top: 0.25rem; }
+    .cms-ccount.warn { color: #f59e0b; }
+    .cms-footer {
+      display: flex; justify-content: flex-end; gap: 0.75rem;
+      margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #1e1e1e;
+    }
+
+    @media (max-width: 640px) {
+      .article-row { grid-template-columns: 1fr; }
+      .article-num { display: none; }
+      .cms-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-logo">
+      <img src="assets/images/logomu.png" alt="MU">
+      <span>RED<b>DEVILS</b></span>
+    </div>
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Main</div>
+      <a href="admin-dashboard.html" class="admin-nav-link">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+    </div>
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Management</div>
+      <a href="manage-products.html" class="admin-nav-link">
+        <span class="nav-icon">👕</span> Products
+      </a>
+      <a href="manage-transactions.html" class="admin-nav-link">
+        <span class="nav-icon">🧾</span> Transactions
+      </a>
+      <a href="manage-users.html" class="admin-nav-link">
+        <span class="nav-icon">👥</span> Users
+      </a>
+      <a href="manage-articles.html" class="admin-nav-link active">
+        <span class="nav-icon">📝</span> Articles
+      </a>
+    </div>
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Store</div>
+      <a href="user-dashboard.html" class="admin-nav-link" target="_blank">
+        <span class="nav-icon">🏪</span> View Store
+      </a>
+    </div>
+    <div class="admin-sidebar-footer">
+      <button onclick="logout()" class="btn btn-ghost" style="width:100%;justify-content:center;">
+        🚪 Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <button id="sidebarToggle"
+      style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;
+             padding:0.5rem 0.75rem;border-radius:8px;cursor:pointer;margin-bottom:1rem;">☰</button>
+
+    <div class="admin-page-header"
+         style="display:flex;align-items:flex-start;justify-content:space-between;
+                flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+      <div>
+        <div class="eyebrow">ADMIN PANEL</div>
+        <h1>MANAGE ARTICLES</h1>
+      </div>
+      <button onclick="openModal()" class="btn btn-primary">+ Tulis Artikel</button>
+    </div>
+
+    <div class="article-stats">
+      <div class="art-stat">
+        <div class="art-stat-val" id="statTotal">0</div>
+        <div class="art-stat-lbl">Total Artikel</div>
+      </div>
+      <div class="art-stat">
+        <div class="art-stat-val" id="statLive" style="color:#22c55e;">0</div>
+        <div class="art-stat-lbl">Published</div>
+      </div>
+      <div class="art-stat">
+        <div class="art-stat-val" id="statDraft" style="color:#888;">0</div>
+        <div class="art-stat-lbl">Draft</div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h3>Semua Artikel</h3>
+        <div class="admin-toolbar">
+          <input type="text" id="searchArticle" class="admin-search" placeholder="🔍 Cari judul...">
+          <select id="filterStatus" class="admin-select">
+            <option value="All">Semua Status</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+      </div>
+      <div style="padding:1.25rem;">
+        <div class="article-list" id="articleList"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="articleModal">
+  <div class="cms-modal">
+    <div class="cms-modal-header">
+      <h3 id="modalTitle">✍️ Tulis Artikel Baru</h3>
+      <button class="cms-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <input type="hidden" id="editId">
+
+    <div class="cms-fg">
+      <label class="cms-lbl">Judul Artikel *</label>
+      <input type="text" id="fTitle" class="cms-inp" maxlength="120"
+             placeholder="Masukkan judul artikel yang menarik..."
+             oninput="cc('fTitle','ccTitle',120)">
+      <div class="cms-ccount" id="ccTitle">0 / 120</div>
+    </div>
+
+    <div class="cms-row">
+      <div class="cms-fg">
+        <label class="cms-lbl">Kategori</label>
+        <select id="fCategory" class="cms-sel">
+          <option>Berita Klub</option>
+          <option>Stadion & Infrastruktur</option>
+          <option>Taktik & Analisis</option>
+          <option>Transfer</option>
+          <option>Produk & Merchandise</option>
+          <option>Sejarah MU</option>
+        </select>
+      </div>
+      <div class="cms-fg">
+        <label class="cms-lbl">Status</label>
+        <select id="fStatus" class="cms-sel">
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="cms-fg">
+      <label class="cms-lbl">Thumbnail (URL / path gambar)</label>
+      <input type="text" id="fImage" class="cms-inp"
+             placeholder="https://... atau assets/images/...jpg">
+    </div>
+
+    <div class="cms-fg">
+      <label class="cms-lbl">Ringkasan / Excerpt *</label>
+      <textarea id="fExcerpt" class="cms-ta" rows="3" maxlength="300"
+                placeholder="Ringkasan singkat yang tampil di halaman list artikel..."
+                oninput="cc('fExcerpt','ccExcerpt',300)"></textarea>
+      <div class="cms-ccount" id="ccExcerpt">0 / 300</div>
+    </div>
+
+    <div class="cms-fg">
+      <label class="cms-lbl">Isi Artikel *</label>
+      <textarea id="fContent" class="cms-ta" rows="9"
+                placeholder="Tulis isi artikel selengkapnya...&#10;&#10;Gunakan baris kosong untuk paragraf baru."></textarea>
+    </div>
+
+    <div class="cms-row">
+      <div class="cms-fg">
+        <label class="cms-lbl">Penulis</label>
+        <input type="text" id="fAuthor" class="cms-inp" value="Admin RedDevils">
+      </div>
+      <div class="cms-fg">
+        <label class="cms-lbl">Tanggal Terbit</label>
+        <input type="date" id="fDate" class="cms-inp">
+      </div>
+    </div>
+
+    <div class="cms-footer">
+      <button onclick="closeModal()" class="btn btn-ghost">Batal</button>
+      <button onclick="doSave('draft')" class="btn btn-ghost"
+              style="border-color:#444;color:#aaa;">💾 Draft</button>
+      <button onclick="doSave('published')" class="btn btn-primary">🚀 Publish</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+const ART_KEY = 'rd_articles';
+
+const SEED = [
+  {
+    id: 'art-001',
+    title: 'Jersi Ketiga Manchester United Resmi Dirilis, Usung Tema Klasik Retro!',
+    category: 'Produk & Merchandise', status: 'published',
+    author: 'Admin RedDevils', date: '2026-06-10',
+    image: 'assets/images/retro.jpg',
+    excerpt: 'Manchester United secara resmi memperkenalkan jersi ketiga musim 2026/27 yang terinspirasi dari era kejayaan The Treble 1999. Desain klasik dengan sentuhan modern yang bikin fans nostalgia sekaligus bangga.',
+    content: `Manchester United akhirnya merilis jersi ketiga untuk musim 2026/27, dan hasilnya? Luar biasa. Mengusung tema "Classic Retro Revival", desain ini terinspirasi langsung dari era keemasan The Treble 1999 yang legendaris.
+
+Warna dasar navy gelap dengan aksen gold khas Old Trafford memberikan nuansa nostalgia yang kuat. Detail bordir crest Manchester United di dada kiri tampil dengan finishing premium yang tidak ditemukan di jersi musim sebelumnya.
+
+Adidas sebagai produsen resmi mengklaim bahwa jersi ini menggunakan teknologi AEROREADY terbaru yang meningkatkan performa pemain di lapangan sekaligus memberikan kenyamanan untuk penggunaan sehari-hari.
+
+Jersi ini sudah tersedia di RedDevils Store dalam versi player version dan fan version. Stok terbatas — pesan sekarang sebelum kehabisan!`
+  },
+  {
+    id: 'art-002',
+    title: 'Renovasi Old Trafford Dimulai: Intip Desain "The New Theatre of Dreams"',
+    category: 'Stadion & Infrastruktur', status: 'published',
+    author: 'Admin RedDevils', date: '2026-06-18',
+    image: 'assets/images/homejersey.jpg',
+    excerpt: 'Proyek renovasi besar-besaran Old Trafford akhirnya resmi dimulai. Manchester United mengumumkan visi "The New Theatre of Dreams" yang akan menjadikan Old Trafford salah satu stadion terbaik di dunia.',
+    content: `Impian puluhan tahun akhirnya terwujud. Proyek renovasi Old Trafford yang bernilai £2 miliar resmi dimulai, dan Manchester United memperkenalkan visi ambisius mereka lewat desain "The New Theatre of Dreams".
+
+Stadion ikonik di Trafford, Greater Manchester ini akan mengalami transformasi total. Kapasitas ditingkatkan dari 74.140 menjadi lebih dari 90.000 kursi, menjadikannya stadion terbesar di Inggris.
+
+Desain baru ini tetap mempertahankan karakter klasik Old Trafford. Fasad bata merah ikonik akan direnovasi, bukan dihancurkan. Empat sudut stadion akan ditutup penuh, menciptakan atmosfer yang selama ini dirindukan fans.
+
+Fasilitas premium juga menjadi prioritas: 200 luxury suite, museum MU yang diperluas 3x lipat, dan ruang ganti kelas dunia. Proses renovasi dijadwalkan selesai pada tahun 2030.`
+  },
+  {
+    id: 'art-003',
+    title: 'Bangkitnya Sang Setan Merah: Strategi Formasi Baru yang Mulai Menakutkan Lawan',
+    category: 'Taktik & Analisis', status: 'published',
+    author: 'Admin RedDevils', date: '2026-06-24',
+    image: 'assets/images/training-kit.jpg',
+    excerpt: 'Setelah beberapa musim penuh turbulensi, Manchester United mulai menampilkan permainan yang kohesif dan mengancam. Analisis mendalam formasi baru yang membuat lawan mulai khawatir menghadapi Setan Merah.',
+    content: `Ada sesuatu yang berbeda dari Manchester United musim ini. Mereka bukan sekadar "tampil lebih baik" — mereka mulai menakutkan lagi.
+
+Pelatih kepala MU menerapkan formasi 4-2-3-1 yang fleksibel, yang bisa berubah menjadi 4-3-3 saat menyerang dan 4-4-2 yang kompak saat bertahan. Adaptasi taktis ini adalah kunci mengapa lawan semakin sulit membaca permainan The Red Devils.
+
+Kunci utama kebangkitan ini adalah pasangan double pivot di lini tengah — memberikan keseimbangan sempurna antara kreativitas dan kerja keras defensif yang lama absen dari skuad MU.
+
+Data statistik menunjukkan bahwa MU berhasil memenangkan 67% duel pressing di sepertiga lapangan lawan — angka tertinggi dalam 5 tahun terakhir.
+
+Dalam kurang dari 6 detik setelah merebut bola, MU sudah mampu menciptakan peluang berbahaya — pola yang kini mulai ditakuti lawan. Glory Glory Man United!`
+  }
+];
+
+function loadArts() {
+  const raw = localStorage.getItem(ART_KEY);
+  if (!raw) { localStorage.setItem(ART_KEY, JSON.stringify(SEED)); return SEED; }
+  return JSON.parse(raw);
+}
+function saveArts(arr) { localStorage.setItem(ART_KEY, JSON.stringify(arr)); }
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function updateStats() {
+  const all = loadArts();
+  document.getElementById('statTotal').textContent = all.length;
+  document.getElementById('statLive').textContent  = all.filter(a => a.status === 'published').length;
+  document.getElementById('statDraft').textContent = all.filter(a => a.status === 'draft').length;
+}
+
+function render(arr) {
+  const list = document.getElementById('articleList');
+  if (!arr.length) {
+    list.innerHTML = `<div class="empty-articles">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">📄</div>
+      <p>Belum ada artikel. Yuk tulis yang pertama!</p>
+    </div>`;
+    updateStats(); return;
+  }
+  list.innerHTML = arr.map((a, i) => `
+    <div class="article-row">
+      <div class="article-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="article-meta">
+        <div class="article-title" title="${a.title}">${a.title}</div>
+        <div class="article-info">
+          <span class="cat-pill">${a.category}</span>
+          <span>${fmtDate(a.date)}</span>
+          <span>✍️ ${a.author}</span>
+          <span class="${a.status==='published'?'dot-live':'dot-draft'}">
+            ● ${a.status==='published'?'Published':'Draft'}
+          </span>
+        </div>
+        <div class="article-excerpt">${a.excerpt}</div>
+      </div>
+      <div class="article-actions">
+        <button class="btn-edit-art" onclick="openModal('${a.id}')">✏️ Edit</button>
+        <button class="btn-del-art"  onclick="delArt('${a.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+  updateStats();
+}
+
+function filterRender() {
+  const kw = (document.getElementById('searchArticle').value||'').toLowerCase();
+  const st = document.getElementById('filterStatus').value;
+  let arr  = loadArts();
+  if (kw) arr = arr.filter(a => a.title.toLowerCase().includes(kw) || a.excerpt.toLowerCase().includes(kw));
+  if (st !== 'All') arr = arr.filter(a => a.status === st);
+  render(arr);
+}
+
+function openModal(id) {
+  const modal = document.getElementById('articleModal');
+  modal.style.display = 'flex';
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+
+  if (id) {
+    const a = loadArts().find(x => x.id === id);
+    if (!a) return;
+    document.getElementById('modalTitle').textContent = '✏️ Edit Artikel';
+    document.getElementById('editId').value    = a.id;
+    document.getElementById('fTitle').value    = a.title;
+    document.getElementById('fCategory').value = a.category;
+    document.getElementById('fStatus').value   = a.status;
+    document.getElementById('fImage').value    = a.image || '';
+    document.getElementById('fExcerpt').value  = a.excerpt;
+    document.getElementById('fContent').value  = a.content;
+    document.getElementById('fAuthor').value   = a.author;
+    document.getElementById('fDate').value     = a.date;
+  } else {
+    document.getElementById('modalTitle').textContent = '✍️ Tulis Artikel Baru';
+    document.getElementById('editId').value   = '';
+    document.getElementById('fTitle').value   = '';
+    document.getElementById('fExcerpt').value = '';
+    document.getElementById('fContent').value = '';
+    document.getElementById('fImage').value   = '';
+    document.getElementById('fAuthor').value  = 'Admin RedDevils';
+    document.getElementById('fCategory').value = 'Berita Klub';
+    document.getElementById('fStatus').value  = 'published';
+  }
+  cc('fTitle','ccTitle',120);
+  cc('fExcerpt','ccExcerpt',300);
+}
+
+function closeModal() {
+  document.getElementById('articleModal').style.display = 'none';
+}
+
+function doSave(forceStatus) {
+  const title   = document.getElementById('fTitle').value.trim();
+  const excerpt = document.getElementById('fExcerpt').value.trim();
+  const content = document.getElementById('fContent').value.trim();
+  if (!title)   { Toast.show('❌ Judul wajib diisi','error'); return; }
+  if (!excerpt) { Toast.show('❌ Ringkasan wajib diisi','error'); return; }
+  if (!content) { Toast.show('❌ Isi artikel tidak boleh kosong','error'); return; }
+
+  const editId = document.getElementById('editId').value;
+  const status = forceStatus || document.getElementById('fStatus').value;
+  const payload = {
+    id:       editId || 'art-' + Date.now(),
+    title, excerpt, content, status,
+    category: document.getElementById('fCategory').value,
+    author:   document.getElementById('fAuthor').value || 'Admin RedDevils',
+    date:     document.getElementById('fDate').value || new Date().toISOString().split('T')[0],
+    image:    document.getElementById('fImage').value.trim()
+  };
+
+  const arts = loadArts();
+  if (editId) {
+    const idx = arts.findIndex(a => a.id === editId);
+    if (idx >= 0) arts[idx] = payload;
+    Toast.show('✅ Artikel berhasil diupdate');
+  } else {
+    arts.unshift(payload);
+    Toast.show(status === 'published' ? '✅ Artikel dipublish!' : '💾 Disimpan sebagai draft');
+  }
+  saveArts(arts);
+  closeModal();
+  filterRender();
+}
+
+function delArt(id) {
+  if (!confirm('Hapus artikel ini?')) return;
+  saveArts(loadArts().filter(a => a.id !== id));
+  Toast.show('🗑️ Artikel dihapus','info');
+  filterRender();
+}
+
+function cc(inputId, countId, max) {
+  const el = document.getElementById(inputId);
+  const cn = document.getElementById(countId);
+  if (!el||!cn) return;
+  const n = el.value.length;
+  cn.textContent = `${n} / ${max}`;
+  cn.classList.toggle('warn', n > max * 0.85);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  filterRender();
+
+  document.getElementById('searchArticle').addEventListener('input', filterRender);
+  document.getElementById('filterStatus').addEventListener('change', filterRender);
+  document.getElementById('articleModal').addEventListener('click', e => {
+    if (e.target.id === 'articleModal') closeModal();
+  });
+
+  const toggle  = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('adminSidebar');
+  toggle?.addEventListener('click', () => sidebar.classList.toggle('open'));
+  const chk = () => { if (toggle) toggle.style.display = window.innerWidth <= 900 ? 'block' : 'none'; };
+  chk(); window.addEventListener('resize', chk);
+});
+</script>
+
+</body>
+</html>

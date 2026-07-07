@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail - RedDevils Store</title>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    .product-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .product-detail-image img {
+      width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      max-height: 520px;
+      border: 1px solid #222;
+    }
+    .product-detail-info { padding-top: 0.5rem; }
+    .product-detail-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      color: #fff;
+      font-family: var(--font-display, sans-serif);
+      letter-spacing: 0.02em;
+      margin: 0.75rem 0;
+      line-height: 1.1;
+    }
+    .product-detail-price {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gold, #FBE122);
+      margin-bottom: 1rem;
+    }
+    .section-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid rgba(218,41,28,0.5);
+      background: rgba(218,41,28,0.1);
+      color: var(--red, #DA291C);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 999px;
+    }
+    .size-options {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .size-btn {
+      padding: 0.45rem 1rem;
+      border: 1px solid #333;
+      background: #111;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .size-btn:hover { border-color: var(--red); }
+    .size-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #222;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .product-detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+
+    <a href="user-dashboard.html" class="nav-logo-wrap">
+      <img class="mu-logo-nav" src="assets/images/logomu.png" alt="MU" />
+      <span class="nav-logo-text">RED<span>DEVILS</span></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="user-dashboard.html" class="nav-link">Home</a>
+      <a href="products.html" class="nav-link active">Products</a>
+      <a href="cart.html" class="nav-link">Cart</a>
+      <a href="history.html" class="nav-link">History</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="cart.html" style="position:relative;display:flex;align-items:center;
+         padding:0.4rem 0.8rem;color:var(--gray-light);font-size:1.1rem;" title="Cart">
+        🛒
+        <span class="cart-badge" id="cartBadgeCount"
+              style="position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;
+                     border-radius:50%;width:16px;height:16px;font-size:0.6rem;font-weight:700;
+                     display:flex;align-items:center;justify-content:center;">0</span>
+      </a>
+      <button class="btn-nav-login" onclick="logout()" style="cursor:pointer;">Logout</button>
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="user-dashboard.html" class="nav-link">Home</a>
+  <a href="products.html" class="nav-link">Products</a>
+  <a href="cart.html" class="nav-link">Cart</a>
+</div>
+
+<section class="section product-detail" style="padding-top:calc(var(--navbar-h, 70px) + 2rem);">
+  <div class="container">
+
+
+
+    <div class="product-detail-grid">
+
+      <!-- gambar -->
+      <div class="product-detail-image fade-in">
+        <img id="detailImage" src="" alt="Product">
+      </div>
+
+      <!-- info -->
+      <div class="product-detail-info fade-in fade-in-delay-2">
+
+        <span class="section-badge" id="detailBadge">Merchandise</span>
+
+        <h1 class="product-detail-title" id="detailTitle">Loading...</h1>
+
+        <div class="product-detail-price" id="detailPrice">—</div>
+
+        <p id="detailDesc" style="color:#888;line-height:1.7;margin-bottom:1.25rem;"></p>
+
+        <hr class="divider">
+
+        <!-- size selector (disembunyikan jika produk non-apparel) -->
+        <div id="sizeSection">
+          <h4 style="color:#fff;margin-bottom:0.75rem;">Pilih Size</h4>
+          <div class="size-options" id="sizeOptions">
+            <button class="size-btn" data-size="S">S</button>
+            <button class="size-btn" data-size="M">M</button>
+            <button class="size-btn" data-size="L">L</button>
+            <button class="size-btn" data-size="XL">XL</button>
+            <button class="size-btn" data-size="XXL">XXL</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.875rem;flex-wrap:wrap;margin-top:1rem;">
+          <button id="addCartBtn" class="btn btn-primary btn-lg">
+            🛒 Add to Cart
+          </button>
+          <a href="cart.html" class="btn btn-outline btn-lg">
+            Lihat Keranjang →
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script src="js/main.js"></script>
+<script src="js/product-detail.js"></script>
+
+<script>
+  // update breadcrumb setelah JS load
+  document.addEventListener('DOMContentLoaded', () => {
+    const title = document.getElementById('detailTitle');
+    const bc    = document.getElementById('breadcrumbName');
+    if (title && bc) {
+      const observer = new MutationObserver(() => {
+        bc.textContent = title.textContent !== 'Loading...' ? title.textContent : 'Detail';
+      });
+      observer.observe(title, { childList: true, characterData: true, subtree: true });
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - RedDevils Store</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    /* ══════════════════════════════════
+       STEP INDICATOR
+    ══════════════════════════════════ */
+    .checkout-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      padding: 0 1rem;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      flex: 1;
+      max-width: 140px;
+    }
+    .step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid #2a2a2a;
+      background: #111;
+      color: #555;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+      transition: all 0.35s ease;
+      position: relative; z-index: 1;
+    }
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #444;
+      text-align: center;
+      transition: color 0.35s;
+      white-space: nowrap;
+    }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: #1e1e1e;
+      margin-bottom: 1.2rem;
+      transition: background 0.4s ease;
+      max-width: 80px;
+    }
+    /* active */
+    .step-item.active .step-circle {
+      border-color: var(--red, #DA291C);
+      background: var(--red, #DA291C);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(218,41,28,0.45);
+    }
+    .step-item.active .step-label { color: #fff; }
+    /* done */
+    .step-item.done .step-circle {
+      border-color: #22c55e;
+      background: #22c55e;
+      color: #fff;
+    }
+    .step-item.done .step-label { color: #22c55e; }
+    .step-line.done { background: #22c55e; }
+
+    /* ══════════════════════════════════
+       CHECKOUT LAYOUT
+    ══════════════════════════════════ */
+    .checkout-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 2rem;
+      align-items: start;
+    }
+    .checkout-panel {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      padding: 2rem;
+    }
+    .checkout-panel h3 {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* step panels */
+    .step-panel { display: none; }
+    .step-panel.visible {
+      display: block;
+      animation: fadeSlide 0.3s ease;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateX(12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── FORM ── */
+    .fg { margin-bottom: 1.1rem; }
+    .fl { display: block; font-size: 0.72rem; font-weight: 700;
+          letter-spacing: 0.1em; text-transform: uppercase;
+          color: #555; margin-bottom: 0.4rem; }
+    .fi, .fs, .fta {
+      width: 100%; background: #161616; border: 1px solid #242424;
+      color: #fff; padding: 0.65rem 0.9rem; border-radius: 9px;
+      font-size: 0.9rem; outline: none; transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .fi:focus, .fs:focus, .fta:focus { border-color: var(--red, #DA291C); }
+    .fta { resize: vertical; min-height: 90px; line-height: 1.65; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ── PAYMENT METHOD CARDS ── */
+    .pay-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .pay-card {
+      background: #161616;
+      border: 2px solid #242424;
+      border-radius: 11px;
+      padding: 1rem 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .pay-card:hover { border-color: #3a3a3a; background: #1a1a1a; }
+    .pay-card.selected {
+      border-color: var(--red, #DA291C);
+      background: rgba(218,41,28,0.07);
+    }
+    .pay-card-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .pay-card-name { color: #fff; font-weight: 600; font-size: 0.88rem; }
+    .pay-card-desc { color: #555; font-size: 0.72rem; margin-top: 0.15rem; }
+    .pay-radio { display: none; }
+
+    /* ── QRIS SECTION ── */
+    .qris-box {
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+    .qris-frame {
+      display: inline-block;
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      margin: 1rem 0;
+      position: relative;
+    }
+    .qris-img {
+      width: 200px; height: 200px;
+      display: block;
+    }
+    /* corner decorations on QR */
+    .qris-frame::before, .qris-frame::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--red, #DA291C);
+      border-style: solid;
+    }
+    .qris-frame::before { top: -2px; left: -2px;
+      border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
+    .qris-frame::after  { bottom: -2px; right: -2px;
+      border-width: 0 3px 3px 0; border-radius: 0 0 4px 4px; }
+    .qris-amount {
+      font-family: var(--font-display, sans-serif);
+      font-size: 1.6rem;
+      color: var(--red, #DA291C);
+      letter-spacing: 0.03em;
+      margin: 0.5rem 0 0.25rem;
+    }
+    .qris-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      color: #f59e0b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin: 0.5rem 0 1rem;
+    }
+    .qris-note {
+      font-size: 0.78rem;
+      color: #555;
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    .qris-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 1.25rem 0;
+      text-align: left;
+    }
+    .qris-step-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: #888;
+    }
+    .qris-step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(218,41,28,0.12);
+      border: 1px solid rgba(218,41,28,0.25);
+      color: var(--red, #DA291C);
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* upload proof section */
+    .upload-zone {
+      border: 2px dashed #2a2a2a;
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      margin: 1rem 0;
+    }
+    .upload-zone:hover { border-color: #444; }
+    .upload-zone.has-file { border-color: #22c55e; border-style: solid; }
+    .upload-zone input { display: none; }
+    .upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .upload-label { color: #666; font-size: 0.82rem; }
+    .upload-label span { color: var(--red, #DA291C); font-weight: 600; cursor: pointer; }
+    .preview-img {
+      max-width: 100%; max-height: 180px;
+      border-radius: 8px; margin-top: 0.75rem;
+      display: none;
+    }
+
+    /* ── INVOICE ── */
+    .invoice-wrap {
+      background: #0a0a0a;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .invoice-header {
+      background: linear-gradient(135deg, #1a0404 0%, var(--red, #DA291C) 100%);
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .invoice-logo-wrap { display: flex; align-items: center; gap: 0.75rem; }
+    .invoice-logo-wrap img { width: 40px; height: 40px; object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.4)); }
+    .invoice-brand { font-family: var(--font-display, sans-serif);
+      font-size: 1.1rem; letter-spacing: 0.12em; color: #fff; }
+    .invoice-brand span { opacity: 0.7; }
+    .invoice-id-block { text-align: right; }
+    .invoice-id { font-family: monospace; font-size: 1rem;
+      font-weight: 700; color: #fff; letter-spacing: 0.08em; }
+    .invoice-date { font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+    .invoice-body { padding: 1.75rem 2rem; }
+    .invoice-section { margin-bottom: 1.5rem; }
+    .invoice-section-label {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: #444; margin-bottom: 0.6rem;
+    }
+    .invoice-info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 2rem;
+    }
+    .inv-field label { font-size: 0.72rem; color: #555; display: block; }
+    .inv-field span  { color: #ddd; font-size: 0.88rem; font-weight: 500; }
+
+    .invoice-items { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+    .invoice-items th {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #444; text-align: left;
+      padding: 0.5rem 0; border-bottom: 1px solid #1a1a1a;
+    }
+    .invoice-items td {
+      padding: 0.65rem 0; border-bottom: 1px solid #141414;
+      font-size: 0.84rem; color: #ccc; vertical-align: middle;
+    }
+    .invoice-items td:last-child { text-align: right; color: var(--gold, #FBE122); font-weight: 600; }
+    .invoice-items th:last-child { text-align: right; }
+
+    .invoice-total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0;
+    }
+    .invoice-total-row span:first-child { color: #555; font-size: 0.84rem; }
+    .invoice-total-row span:last-child  { color: #ccc; font-size: 0.84rem; font-weight: 600; }
+    .invoice-total-row.grand {
+      border-top: 1px solid #2a2a2a;
+      margin-top: 0.5rem; padding-top: 0.85rem;
+    }
+    .invoice-total-row.grand span:first-child { color: #fff; font-weight: 700; font-size: 1rem; }
+    .invoice-total-row.grand span:last-child  { color: var(--red, #DA291C);
+      font-size: 1.1rem; font-weight: 700; font-family: var(--font-display, sans-serif); }
+
+    .invoice-status-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.85rem; border-radius: 999px;
+      background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3);
+      color: #22c55e; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .invoice-footer {
+      border-top: 1px solid #1a1a1a;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .invoice-footer p { font-size: 0.75rem; color: #444; }
+    .invoice-footer strong { color: var(--red, #DA291C); }
+
+    /* ── ORDER SUMMARY (right col) ── */
+    .summary-panel {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      padding: 1.5rem;
+      position: sticky;
+      top: 5rem;
+    }
+    .summary-panel h4 { color: #fff; font-size: 0.9rem; font-weight: 700;
+      margin-bottom: 1.1rem; }
+    .summary-items { margin-bottom: 1rem; }
+    .sum-item {
+      display: flex; align-items: center; gap: 0.65rem;
+      padding: 0.5rem 0; border-bottom: 1px solid #141414;
+    }
+    .sum-item:last-child { border-bottom: none; }
+    .sum-item img {
+      width: 40px; height: 40px; object-fit: cover;
+      border-radius: 6px; flex-shrink: 0;
+    }
+    .sum-item-name { color: #ccc; font-size: 0.8rem; flex: 1; min-width: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sum-item-qty  { color: #555; font-size: 0.75rem; }
+    .sum-item-price{ color: var(--gold, #FBE122); font-weight: 600; font-size: 0.82rem;
+      white-space: nowrap; }
+    .sum-divider { border: none; border-top: 1px solid #1e1e1e; margin: 0.75rem 0; }
+    .sum-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+    .sum-row span:first-child { color: #555; font-size: 0.82rem; }
+    .sum-row span:last-child  { color: #ccc; font-weight: 600; font-size: 0.82rem; }
+    .sum-row.total span:first-child { color: #fff; font-weight: 700; }
+    .sum-row.total span:last-child  { color: var(--red, #DA291C); font-weight: 700; font-size: 1rem; }
+
+    /* ── BUTTONS ── */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+    .btn-next {
+      background: var(--red, #DA291C); color: #fff; border: none;
+      padding: 0.75rem 1.75rem; border-radius: 9px; font-weight: 700;
+      font-size: 0.9rem; cursor: pointer; transition: background 0.2s;
+      flex: 1;
+    }
+    .btn-next:hover { background: #b61c14; }
+    .btn-back {
+      background: #1a1a1a; color: #888; border: 1px solid #2a2a2a;
+      padding: 0.75rem 1.25rem; border-radius: 9px; font-weight: 600;
+      font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-back:hover { color: #fff; border-color: #444; }
+    .btn-print {
+      background: #1a1a1a; color: #fff; border: 1px solid #2a2a2a;
+      padding: 0.65rem 1.25rem; border-radius: 9px; font-weight: 600;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-print:hover { border-color: #555; }
+
+    /* success animation */
+    .success-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(34,197,94,0.12); border: 2px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin: 0 auto 1rem;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    /* QRIS countdown pulse */
+    @keyframes timerPulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.6; }
+    }
+    .timer-anim { animation: timerPulse 1s ease-in-out infinite; }
+
+    @media print {
+      body > *:not(.checkout-wrap) { display: none !important; }
+      .checkout-steps, .step-panel:not(#step4), .checkout-grid > .summary-panel,
+      .step-nav, header, footer { display: none !important; }
+      #step4 { display: block !important; }
+      .invoice-wrap { border: none; }
+      .checkout-wrap { padding: 0; }
+    }
+
+    @media (max-width: 780px) {
+      .checkout-grid { grid-template-columns: 1fr; }
+      .summary-panel { position: static; order: -1; }
+      .pay-methods { grid-template-columns: 1fr 1fr; }
+      .invoice-info-grid { grid-template-columns: 1fr; }
+      .step-label { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .pay-methods { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="user-dashboard.html" class="nav-logo-wrap">
+      <img class="mu-logo-nav" src="assets/images/logomu.png" alt="MU">
+      <span class="nav-logo-text">RED<span>DEVILS</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="user-dashboard.html" class="nav-link">Home</a>
+      <a href="products.html" class="nav-link">Products</a>
+      <a href="cart.html" class="nav-link">Cart</a>
+      <a href="history.html" class="nav-link">History</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="cart.html" style="position:relative;display:flex;align-items:center;
+         padding:0.4rem 0.8rem;color:var(--gray-light,#aaa);font-size:1.1rem;" title="Cart">
+        🛒
+        <span id="cartBadgeCount"
+              style="position:absolute;top:-4px;right:-4px;background:var(--red,#DA291C);
+                     color:#fff;border-radius:50%;width:16px;height:16px;font-size:0.6rem;
+                     font-weight:700;display:flex;align-items:center;justify-content:center;">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="page-header" style="padding-top:calc(var(--navbar-h,70px) + 1.5rem);
+  padding-bottom:1.5rem;">
+  <h1 class="page-title">CHECKOUT</h1>
+  <p class="page-subtitle">Selesaikan pesananmu dengan aman.</p>
+</section>
+
+<div class="checkout-wrap">
+
+  <!-- STEP INDICATOR -->
+  <div class="checkout-steps" id="stepIndicator">
+    <div class="step-item active" id="si1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Pengiriman</div>
+    </div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step-item" id="si2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Pembayaran</div>
+    </div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step-item" id="si3">
+      <div class="step-circle">3</div>
+      <div class="step-label">Konfirmasi</div>
+    </div>
+    <div class="step-line" id="sl3"></div>
+    <div class="step-item" id="si4">
+      <div class="step-circle">✓</div>
+      <div class="step-label">Invoice</div>
+    </div>
+  </div>
+
+  <div class="checkout-grid">
+
+    <!-- LEFT: Step panels -->
+    <div>
+
+      <!-- ══ STEP 1: Pengiriman ══ -->
+      <div class="step-panel visible" id="step1">
+        <div class="checkout-panel">
+          <h3>📦 Informasi Pengiriman</h3>
+
+          <div class="form-row">
+            <div class="fg">
+              <label class="fl" for="inpName">Nama Lengkap *</label>
+              <input type="text" id="inpName" class="fi" placeholder="Nama sesuai penerima">
+            </div>
+            <div class="fg">
+              <label class="fl" for="inpPhone">No. WhatsApp *</label>
+              <input type="tel" id="inpPhone" class="fi" placeholder="08xxxxxxxxxx">
+            </div>
+          </div>
+
+          <div class="fg">
+            <label class="fl" for="inpEmail">Email *</label>
+            <input type="email" id="inpEmail" class="fi" placeholder="email@kamu.com">
+          </div>
+
+          <div class="fg">
+            <label class="fl" for="inpAddress">Alamat Lengkap *</label>
+            <textarea id="inpAddress" class="fta"
+              placeholder="Jalan, nomor rumah, RT/RW, kelurahan, kecamatan..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="fg">
+              <label class="fl" for="inpCity">Kota / Kabupaten *</label>
+              <input type="text" id="inpCity" class="fi" placeholder="Surabaya">
+            </div>
+            <div class="fg">
+              <label class="fl" for="inpPostal">Kode Pos *</label>
+              <input type="text" id="inpPostal" class="fi" placeholder="60111" maxlength="5">
+            </div>
+          </div>
+
+          <div class="fg">
+            <label class="fl" for="inpNote">Catatan (opsional)</label>
+            <input type="text" id="inpNote" class="fi"
+              placeholder="Tolong hubungi saya sebelum dikirim, dll.">
+          </div>
+
+          <div class="step-nav">
+            <a href="cart.html" class="btn-back">← Kembali ke Cart</a>
+            <button class="btn-next" onclick="goStep(2)">
+              Lanjut ke Pembayaran →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 2: Metode Pembayaran ══ -->
+      <div class="step-panel" id="step2">
+        <div class="checkout-panel">
+          <h3>💳 Pilih Metode Pembayaran</h3>
+
+          <div class="pay-methods">
+            <label class="pay-card selected" id="pm-qris" onclick="selectPay('qris', this)">
+              <input type="radio" name="payMethod" value="qris" class="pay-radio" checked>
+              <div class="pay-card-icon">📱</div>
+              <div>
+                <div class="pay-card-name">QRIS</div>
+                <div class="pay-card-desc">GoPay · OVO · Dana · dll</div>
+              </div>
+            </label>
+            <label class="pay-card" id="pm-bca" onclick="selectPay('bca', this)">
+              <input type="radio" name="payMethod" value="bca" class="pay-radio">
+              <div class="pay-card-icon">🏦</div>
+              <div>
+                <div class="pay-card-name">BCA Transfer</div>
+                <div class="pay-card-desc">Virtual Account</div>
+              </div>
+            </label>
+            <label class="pay-card" id="pm-mandiri" onclick="selectPay('mandiri', this)">
+              <input type="radio" name="payMethod" value="mandiri" class="pay-radio">
+              <div class="pay-card-icon">🏧</div>
+              <div>
+                <div class="pay-card-name">Mandiri</div>
+                <div class="pay-card-desc">Virtual Account</div>
+              </div>
+            </label>
+            <label class="pay-card" id="pm-cod" onclick="selectPay('cod', this)">
+              <input type="radio" name="payMethod" value="cod" class="pay-radio">
+              <div class="pay-card-icon">🚪</div>
+              <div>
+                <div class="pay-card-name">COD</div>
+                <div class="pay-card-desc">Bayar di tempat</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- detail per metode -->
+          <div id="payDetail-qris"
+               style="background:#161616;border:1px solid #242424;border-radius:10px;
+                      padding:1rem 1.25rem;font-size:0.84rem;color:#888;">
+            <p>✅ Scan QR Code di langkah berikutnya menggunakan aplikasi e-wallet favoritmu.</p>
+            <p style="margin-top:0.3rem;">Mendukung: GoPay, OVO, Dana, ShopeePay, LinkAja, dan semua bank yang support QRIS.</p>
+          </div>
+          <div id="payDetail-bca" style="display:none;background:#161616;border:1px solid #242424;
+               border-radius:10px;padding:1rem 1.25rem;font-size:0.84rem;color:#888;">
+            <p>Virtual Account BCA: <strong style="color:#fff;font-family:monospace;">8277 0001 2345 6789</strong></p>
+            <p style="margin-top:0.3rem;">Transfer sesuai nominal total pesanan. Upload bukti di langkah berikutnya.</p>
+          </div>
+          <div id="payDetail-mandiri" style="display:none;background:#161616;border:1px solid #242424;
+               border-radius:10px;padding:1rem 1.25rem;font-size:0.84rem;color:#888;">
+            <p>Virtual Account Mandiri: <strong style="color:#fff;font-family:monospace;">8881 2345 6789 0001</strong></p>
+            <p style="margin-top:0.3rem;">Transfer sesuai nominal total pesanan. Upload bukti di langkah berikutnya.</p>
+          </div>
+          <div id="payDetail-cod" style="display:none;background:#161616;border:1px solid #242424;
+               border-radius:10px;padding:1rem 1.25rem;font-size:0.84rem;color:#888;">
+            <p>💵 Siapkan uang tunai saat kurir tiba. Pesananmu akan diproses dan dikirim dalam 1-2 hari kerja.</p>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn-back" onclick="goStep(1)">← Kembali</button>
+            <button class="btn-next" onclick="goStep(3)">
+              Lanjut ke Pembayaran →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: Konfirmasi / QRIS / Upload ══ -->
+      <div class="step-panel" id="step3">
+        <div class="checkout-panel">
+          <h3 id="step3Title">📱 Scan QRIS</h3>
+
+          <!-- QRIS panel -->
+          <div id="panel-qris">
+            <div class="qris-box">
+              <p style="color:#888;font-size:0.82rem;">
+                Scan QR di bawah menggunakan e-wallet atau m-banking kamu
+              </p>
+
+              <div class="qris-frame">
+                <!-- QR Code SVG — generated pattern representing QRIS -->
+                <svg class="qris-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <!-- white bg -->
+                  <rect width="200" height="200" fill="white"/>
+                  <!-- quiet zone -->
+                  <rect x="10" y="10" width="180" height="180" fill="white"/>
+
+                  <!-- top-left finder -->
+                  <rect x="14" y="14" width="49" height="49" fill="black" rx="3"/>
+                  <rect x="18" y="18" width="41" height="41" fill="white" rx="2"/>
+                  <rect x="22" y="22" width="33" height="33" fill="black" rx="1"/>
+
+                  <!-- top-right finder -->
+                  <rect x="137" y="14" width="49" height="49" fill="black" rx="3"/>
+                  <rect x="141" y="18" width="41" height="41" fill="white" rx="2"/>
+                  <rect x="145" y="22" width="33" height="33" fill="black" rx="1"/>
+
+                  <!-- bottom-left finder -->
+                  <rect x="14" y="137" width="49" height="49" fill="black" rx="3"/>
+                  <rect x="18" y="141" width="41" height="41" fill="white" rx="2"/>
+                  <rect x="22" y="145" width="33" height="33" fill="black" rx="1"/>
+
+                  <!-- timing patterns -->
+                  <rect x="63" y="14" width="7" height="7" fill="black"/>
+                  <rect x="77" y="14" width="7" height="7" fill="black"/>
+                  <rect x="91" y="14" width="7" height="7" fill="black"/>
+                  <rect x="105" y="14" width="7" height="7" fill="black"/>
+                  <rect x="119" y="14" width="7" height="7" fill="black"/>
+                  <rect x="14" y="63" width="7" height="7" fill="black"/>
+                  <rect x="14" y="77" width="7" height="7" fill="black"/>
+                  <rect x="14" y="91" width="7" height="7" fill="black"/>
+                  <rect x="14" y="105" width="7" height="7" fill="black"/>
+                  <rect x="14" y="119" width="7" height="7" fill="black"/>
+
+                  <!-- data modules (randomised-looking pattern) -->
+                  <rect x="70" y="70" width="60" height="60" fill="white"/>
+                  <!-- center logo area -->
+                  <rect x="82" y="82" width="36" height="36" rx="4" fill="#DA291C"/>
+                  <text x="100" y="106" text-anchor="middle" fill="white"
+                        font-family="sans-serif" font-size="18" font-weight="bold">MU</text>
+
+                  <!-- scattered data bits -->
+                  <rect x="70" y="63" width="7" height="7" fill="black"/>
+                  <rect x="84" y="63" width="7" height="7" fill="black"/>
+                  <rect x="98" y="63" width="7" height="7" fill="black"/>
+                  <rect x="112" y="63" width="7" height="7" fill="black"/>
+                  <rect x="126" y="63" width="7" height="7" fill="black"/>
+                  <rect x="63" y="70" width="7" height="7" fill="black"/>
+                  <rect x="63" y="84" width="7" height="7" fill="black"/>
+                  <rect x="63" y="98" width="7" height="7" fill="black"/>
+                  <rect x="63" y="112" width="7" height="7" fill="black"/>
+                  <rect x="63" y="126" width="7" height="7" fill="black"/>
+                  <rect x="133" y="70" width="7" height="7" fill="black"/>
+                  <rect x="133" y="84" width="7" height="7" fill="black"/>
+                  <rect x="133" y="98" width="7" height="7" fill="black"/>
+                  <rect x="133" y="112" width="7" height="7" fill="black"/>
+                  <rect x="133" y="126" width="7" height="7" fill="black"/>
+                  <rect x="70" y="133" width="7" height="7" fill="black"/>
+                  <rect x="84" y="133" width="7" height="7" fill="black"/>
+                  <rect x="98" y="133" width="7" height="7" fill="black"/>
+                  <rect x="112" y="133" width="7" height="7" fill="black"/>
+                  <rect x="126" y="133" width="7" height="7" fill="black"/>
+                  <!-- extra bits -->
+                  <rect x="77" y="147" width="7" height="7" fill="black"/>
+                  <rect x="91" y="154" width="7" height="7" fill="black"/>
+                  <rect x="105" y="147" width="7" height="7" fill="black"/>
+                  <rect x="119" y="154" width="7" height="7" fill="black"/>
+                  <rect x="147" y="77" width="7" height="7" fill="black"/>
+                  <rect x="154" y="91" width="7" height="7" fill="black"/>
+                  <rect x="147" y="105" width="7" height="7" fill="black"/>
+                  <rect x="154" y="119" width="7" height="7" fill="black"/>
+
+                  <!-- QRIS label -->
+                  <rect x="60" y="172" width="80" height="16" rx="3" fill="#DA291C"/>
+                  <text x="100" y="184" text-anchor="middle" fill="white"
+                        font-family="sans-serif" font-size="9" font-weight="bold"
+                        letter-spacing="1">QRIS</text>
+                </svg>
+              </div>
+
+              <div class="qris-amount" id="qrisAmount">—</div>
+              <div style="color:#888;font-size:0.78rem;margin-bottom:0.5rem;">
+                RedDevils Store · ID: <span style="font-family:monospace;color:#aaa;"
+                id="qrisMerchant">RD-2026</span>
+              </div>
+
+              <div class="qris-timer">
+                <span>⏱</span>
+                <span class="timer-anim">Berlaku selama <span id="countdown">15:00</span></span>
+              </div>
+            </div>
+
+            <div class="qris-steps">
+              <div class="qris-step-row">
+                <div class="qris-step-num">1</div>
+                <span>Buka aplikasi e-wallet atau m-banking kamu (GoPay, OVO, Dana, BCA, dll)</span>
+              </div>
+              <div class="qris-step-row">
+                <div class="qris-step-num">2</div>
+                <span>Pilih menu <strong style="color:#fff;">Scan QR</strong> atau <strong style="color:#fff;">Bayar</strong></span>
+              </div>
+              <div class="qris-step-row">
+                <div class="qris-step-num">3</div>
+                <span>Arahkan kamera ke QR Code di atas</span>
+              </div>
+              <div class="qris-step-row">
+                <div class="qris-step-num">4</div>
+                <span>Pastikan nominal sesuai, lalu konfirmasi pembayaran</span>
+              </div>
+              <div class="qris-step-row">
+                <div class="qris-step-num">5</div>
+                <span>Klik <strong style="color:#fff;">"Saya sudah bayar"</strong> di bawah setelah transaksi berhasil</span>
+              </div>
+            </div>
+
+            <div class="step-nav">
+              <button class="btn-back" onclick="goStep(2)">← Ganti Metode</button>
+              <button class="btn-next" onclick="confirmPayment()">
+                ✅ Saya Sudah Bayar
+              </button>
+            </div>
+          </div>
+
+          <!-- Transfer panel (BCA / Mandiri) -->
+          <div id="panel-transfer" style="display:none;">
+            <div style="background:#161616;border:1px solid #242424;border-radius:10px;
+                 padding:1.25rem;margin-bottom:1.25rem;">
+              <div style="font-size:0.72rem;color:#555;text-transform:uppercase;
+                   letter-spacing:0.1em;font-weight:700;margin-bottom:0.6rem;">
+                Nominal Transfer
+              </div>
+              <div style="font-family:var(--font-display,sans-serif);font-size:1.6rem;
+                   color:var(--red,#DA291C);" id="transferAmount">—</div>
+              <div style="color:#555;font-size:0.78rem;margin-top:0.2rem;">
+                Transfer tepat sesuai nominal agar verifikasi otomatis
+              </div>
+            </div>
+
+            <div style="background:#161616;border:1px solid #242424;border-radius:10px;
+                 padding:1.25rem;margin-bottom:1.25rem;">
+              <div style="font-size:0.72rem;color:#555;text-transform:uppercase;
+                   letter-spacing:0.1em;font-weight:700;margin-bottom:0.75rem;">
+                Tujuan Transfer
+              </div>
+              <div id="vaInfo" style="color:#ccc;font-size:0.88rem;"></div>
+            </div>
+
+            <!-- upload proof -->
+            <div style="font-size:0.72rem;color:#555;text-transform:uppercase;
+                 letter-spacing:0.1em;font-weight:700;margin-bottom:0.5rem;">
+              Upload Bukti Pembayaran
+            </div>
+            <div class="upload-zone" id="uploadZone" onclick="triggerUpload()">
+              <input type="file" id="proofFile" accept="image/*" onchange="previewProof(this)">
+              <div class="upload-icon" id="uploadIcon">📷</div>
+              <div class="upload-label" id="uploadLabel">
+                <span>Klik di sini</span> untuk upload screenshot bukti transfer
+              </div>
+              <img id="previewImg" class="preview-img" alt="Bukti Transfer">
+            </div>
+
+            <div class="step-nav">
+              <button class="btn-back" onclick="goStep(2)">← Ganti Metode</button>
+              <button class="btn-next" onclick="confirmPayment()">
+                ✅ Konfirmasi Pembayaran
+              </button>
+            </div>
+          </div>
+
+          <!-- COD panel -->
+          <div id="panel-cod" style="display:none;text-align:center;padding:1rem 0;">
+            <div style="font-size:3rem;margin-bottom:1rem;">🚚</div>
+            <h4 style="color:#fff;margin-bottom:0.5rem;">Bayar saat barang tiba</h4>
+            <p style="color:#888;font-size:0.85rem;max-width:340px;margin:0 auto 1.5rem;
+               line-height:1.7;">
+              Pesananmu akan diproses dan kurir kami akan menghubungimu dalam
+              <strong style="color:#fff;">1–2 hari kerja</strong>.
+              Siapkan uang tunai sesuai nominal saat kurir tiba.
+            </p>
+            <div style="background:#161616;border:1px solid #242424;border-radius:10px;
+                 padding:1rem;margin-bottom:1.5rem;display:inline-block;min-width:200px;">
+              <div style="font-size:0.7rem;color:#555;text-transform:uppercase;
+                   letter-spacing:0.1em;font-weight:700;margin-bottom:0.3rem;">Total COD</div>
+              <div style="font-family:var(--font-display,sans-serif);font-size:1.5rem;
+                   color:var(--red,#DA291C);" id="codAmount">—</div>
+            </div>
+            <div class="step-nav">
+              <button class="btn-back" onclick="goStep(2)">← Ganti Metode</button>
+              <button class="btn-next" onclick="confirmPayment()">
+                ✅ Konfirmasi Pesanan
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ STEP 4: Invoice ══ -->
+      <div class="step-panel" id="step4">
+
+        <!-- success header -->
+        <div style="text-align:center;margin-bottom:2rem;">
+          <div class="success-icon">✅</div>
+          <h2 style="color:#fff;font-size:1.3rem;margin-bottom:0.3rem;">
+            Pesanan Berhasil!
+          </h2>
+          <p style="color:#888;font-size:0.88rem;">
+            Invoice dikirim ke email kamu. Simpan halaman ini sebagai bukti pembelian.
+          </p>
+          <div style="display:flex;justify-content:center;gap:0.75rem;margin-top:1rem;">
+            <button class="btn-print" onclick="window.print()">🖨️ Cetak Invoice</button>
+            <a href="history.html" class="btn-print" style="text-decoration:none;">
+              📋 Lihat History
+            </a>
+            <a href="products.html" class="btn-print" style="text-decoration:none;">
+              🛒 Belanja Lagi
+            </a>
+          </div>
+        </div>
+
+        <!-- invoice card -->
+        <div class="invoice-wrap" id="invoiceCard">
+          <div class="invoice-header">
+            <div class="invoice-logo-wrap">
+              <img src="assets/images/logomu.png" alt="MU">
+              <div>
+                <div class="invoice-brand">RED<span>DEVILS</span></div>
+                <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);
+                     letter-spacing:0.1em;text-transform:uppercase;">Store Invoice</div>
+              </div>
+            </div>
+            <div class="invoice-id-block">
+              <div class="invoice-id" id="invId">INV-—</div>
+              <div class="invoice-date" id="invDate">—</div>
+              <div style="margin-top:0.4rem;">
+                <span class="invoice-status-badge">● Paid</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="invoice-body">
+
+            <!-- info customer & pengiriman -->
+            <div class="invoice-section">
+              <div class="invoice-section-label">Detail Pelanggan</div>
+              <div class="invoice-info-grid">
+                <div class="inv-field">
+                  <label>Nama</label>
+                  <span id="invName">—</span>
+                </div>
+                <div class="inv-field">
+                  <label>Email</label>
+                  <span id="invEmail">—</span>
+                </div>
+                <div class="inv-field">
+                  <label>No. WhatsApp</label>
+                  <span id="invPhone">—</span>
+                </div>
+                <div class="inv-field">
+                  <label>Metode Bayar</label>
+                  <span id="invPayMethod">—</span>
+                </div>
+                <div class="inv-field" style="grid-column:1/-1;">
+                  <label>Alamat Pengiriman</label>
+                  <span id="invAddress">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- items -->
+            <div class="invoice-section">
+              <div class="invoice-section-label">Rincian Pesanan</div>
+              <table class="invoice-items">
+                <thead>
+                  <tr>
+                    <th>Produk</th>
+                    <th>Qty</th>
+                    <th>Harga</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="invItems"></tbody>
+              </table>
+            </div>
+
+            <!-- totals -->
+            <div class="invoice-section" style="max-width:320px;margin-left:auto;">
+              <div class="invoice-total-row">
+                <span>Subtotal</span>
+                <span id="invSubtotal">—</span>
+              </div>
+              <div class="invoice-total-row">
+                <span>Ongkos Kirim</span>
+                <span style="color:#22c55e;font-weight:700;">GRATIS</span>
+              </div>
+              <div class="invoice-total-row grand">
+                <span>TOTAL</span>
+                <span id="invTotal">—</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="invoice-footer">
+            <p>Terima kasih telah berbelanja di <strong>RedDevils Store</strong> 🔴<br>
+               Glory Glory Man United · Est. 1878</p>
+            <p style="text-align:right;">
+              Pertanyaan? <strong>reddevilsstore@gmail.com</strong>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Order Summary -->
+    <div class="summary-panel" id="summaryPanel">
+      <h4>🛒 Ringkasan Pesanan</h4>
+      <div class="summary-items" id="summaryItems">
+        <p style="color:#555;font-size:0.82rem;">Memuat...</p>
+      </div>
+      <hr class="sum-divider">
+      <div class="sum-row">
+        <span>Subtotal</span>
+        <span id="sumSubtotal">—</span>
+      </div>
+      <div class="sum-row">
+        <span>Ongkir</span>
+        <span style="color:#22c55e;font-weight:700;">GRATIS</span>
+      </div>
+      <hr class="sum-divider">
+      <div class="sum-row total">
+        <span>Total</span>
+        <span id="sumTotal">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let currentStep  = 1;
+let selectedPay  = 'qris';
+let timerHandle  = null;
+let timerSec     = 15 * 60;
+let orderData    = {};
+
+// ── INIT ─────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  prefillUser();
+  renderSummary();
+  updateStepUI(1);
+});
+
+// ── PREFILL ──────────────────────────────
+function prefillUser() {
+  const u = JSON.parse(localStorage.getItem('rd_user_now') || 'null');
+  if (!u) return;
+  if (u.name)  document.getElementById('inpName').value  = u.name;
+  if (u.email) document.getElementById('inpEmail').value = u.email;
+}
+
+// ── SUMMARY ──────────────────────────────
+function renderSummary() {
+  const items = Cart.get();
+  const si    = document.getElementById('summaryItems');
+  const grand = Cart.total();
+
+  if (!items.length) {
+    si.innerHTML = '<p style="color:#555;font-size:0.82rem;">Keranjang kosong.</p>';
+    document.getElementById('sumSubtotal').textContent = formatIDR(0);
+    document.getElementById('sumTotal').textContent    = formatIDR(0);
+    return;
+  }
+
+  si.innerHTML = items.map(i => `
+    <div class="sum-item">
+      <img src="${i.image||''}"
+           onerror="this.src='https://placehold.co/40x40/111/da291c?text=MU'"
+           alt="${i.name}">
+      <span class="sum-item-name">${i.name}</span>
+      <div style="text-align:right;flex-shrink:0;">
+        <div class="sum-item-price">${formatIDR(i.price * i.qty)}</div>
+        <div class="sum-item-qty">× ${i.qty}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('sumSubtotal').textContent = formatIDR(grand);
+  document.getElementById('sumTotal').textContent    = formatIDR(grand);
+}
+
+// ══════════════════════════════════════════
+//  STEP NAVIGATION
+// ══════════════════════════════════════════
+function goStep(n) {
+  if (n === 2 && !validateStep1()) return;
+
+  currentStep = n;
+  updateStepUI(n);
+
+  // scroll ke atas panel
+  window.scrollTo({ top: 120, behavior: 'smooth' });
+
+  // tindakan per step
+  if (n === 3) setupPayStep();
+}
+
+function updateStepUI(n) {
+  // panels
+  for (let i = 1; i <= 4; i++) {
+    const p = document.getElementById('step' + i);
+    if (p) p.classList.toggle('visible', i === n);
+  }
+  // step indicator
+  for (let i = 1; i <= 4; i++) {
+    const si = document.getElementById('si' + i);
+    if (!si) continue;
+    si.classList.remove('active','done');
+    if (i < n)  si.classList.add('done');
+    if (i === n) si.classList.add('active');
+  }
+  // lines
+  for (let i = 1; i <= 3; i++) {
+    const sl = document.getElementById('sl' + i);
+    if (sl) sl.classList.toggle('done', i < n);
+  }
+}
+
+// ══════════════════════════════════════════
+//  VALIDATION
+// ══════════════════════════════════════════
+function validateStep1() {
+  const fields = [
+    { id: 'inpName',    label: 'Nama lengkap' },
+    { id: 'inpPhone',   label: 'No. WhatsApp' },
+    { id: 'inpEmail',   label: 'Email' },
+    { id: 'inpAddress', label: 'Alamat' },
+    { id: 'inpCity',    label: 'Kota' },
+    { id: 'inpPostal',  label: 'Kode pos' }
+  ];
+  for (const f of fields) {
+    const el = document.getElementById(f.id);
+    if (!el.value.trim()) {
+      Toast.show(`❌ ${f.label} wajib diisi`, 'error');
+      el.focus(); el.style.borderColor = '#ef4444';
+      el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+      return false;
+    }
+  }
+  const email = document.getElementById('inpEmail').value;
+  if (!/\S+@\S+\.\S+/.test(email)) {
+    Toast.show('❌ Format email tidak valid', 'error');
+    document.getElementById('inpEmail').focus();
+    return false;
+  }
+  if (!Cart.get().length) {
+    Toast.show('❌ Keranjang kamu kosong', 'error');
+    return false;
+  }
+  return true;
+}
+
+// ══════════════════════════════════════════
+//  PAYMENT METHOD
+// ══════════════════════════════════════════
+function selectPay(method, el) {
+  selectedPay = method;
+  document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  // show detail
+  ['qris','bca','mandiri','cod'].forEach(m => {
+    const d = document.getElementById('payDetail-' + m);
+    if (d) d.style.display = m === method ? 'block' : 'none';
+  });
+}
+
+// ══════════════════════════════════════════
+//  STEP 3 SETUP
+// ══════════════════════════════════════════
+function setupPayStep() {
+  const grand = Cart.total();
+  const fmtd  = formatIDR(grand);
+
+  // hide all panels
+  ['qris','transfer','cod'].forEach(p => {
+    const el = document.getElementById('panel-' + p);
+    if (el) el.style.display = 'none';
+  });
+
+  if (selectedPay === 'qris') {
+    document.getElementById('panel-qris').style.display = 'block';
+    document.getElementById('step3Title').textContent = '📱 Scan QRIS';
+    document.getElementById('qrisAmount').textContent = fmtd;
+    document.getElementById('qrisMerchant').textContent = 'RD-' + Date.now().toString().slice(-6);
+    startTimer();
+
+  } else if (selectedPay === 'bca' || selectedPay === 'mandiri') {
+    document.getElementById('panel-transfer').style.display = 'block';
+    document.getElementById('step3Title').textContent = '🏦 Transfer Bank';
+    document.getElementById('transferAmount').textContent = fmtd;
+
+    const vaInfo = document.getElementById('vaInfo');
+    if (selectedPay === 'bca') {
+      vaInfo.innerHTML = `
+        <div style="margin-bottom:0.5rem;">Bank: <strong style="color:#fff;">BCA</strong></div>
+        <div style="margin-bottom:0.5rem;">Atas Nama: <strong style="color:#fff;">RedDevils Store</strong></div>
+        <div>Virtual Account:
+          <strong style="color:#fff;font-family:monospace;font-size:1.05rem;">
+            8277 0001 2345 6789
+          </strong>
+        </div>`;
+    } else {
+      vaInfo.innerHTML = `
+        <div style="margin-bottom:0.5rem;">Bank: <strong style="color:#fff;">Mandiri</strong></div>
+        <div style="margin-bottom:0.5rem;">Atas Nama: <strong style="color:#fff;">RedDevils Store</strong></div>
+        <div>Virtual Account:
+          <strong style="color:#fff;font-family:monospace;font-size:1.05rem;">
+            8881 2345 6789 0001
+          </strong>
+        </div>`;
+    }
+
+  } else {
+    document.getElementById('panel-cod').style.display = 'block';
+    document.getElementById('step3Title').textContent = '🚚 COD — Bayar di Tempat';
+    document.getElementById('codAmount').textContent = fmtd;
+  }
+}
+
+// ── QRIS COUNTDOWN ───────────────────────
+function startTimer() {
+  clearInterval(timerHandle);
+  timerSec = 15 * 60;
+  timerHandle = setInterval(() => {
+    timerSec--;
+    if (timerSec <= 0) {
+      clearInterval(timerHandle);
+      document.getElementById('countdown').textContent = '00:00';
+      return;
+    }
+    const m = String(Math.floor(timerSec / 60)).padStart(2,'0');
+    const s = String(timerSec % 60).padStart(2,'0');
+    document.getElementById('countdown').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+// ── UPLOAD PROOF ─────────────────────────
+function triggerUpload() {
+  document.getElementById('proofFile').click();
+}
+function previewProof(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('previewImg');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('uploadZone').classList.add('has-file');
+    document.getElementById('uploadIcon').textContent = '✅';
+    document.getElementById('uploadLabel').innerHTML =
+      `<span style="color:#22c55e;font-weight:700;">${file.name}</span> berhasil diupload`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══════════════════════════════════════════
+//  CONFIRM PAYMENT → INVOICE
+// ══════════════════════════════════════════
+function confirmPayment() {
+  clearInterval(timerHandle);
+
+  const payLabels = {
+    qris:    'QRIS (E-Wallet)',
+    bca:     'Bank Transfer BCA',
+    mandiri: 'Bank Transfer Mandiri',
+    cod:     'COD (Bayar di Tempat)'
+  };
+
+  // collect form data
+  orderData = {
+    id:      'INV-' + Date.now(),
+    date:    new Date().toLocaleDateString('id-ID', {
+               day:'numeric', month:'long', year:'numeric',
+               hour:'2-digit', minute:'2-digit'
+             }),
+    name:    document.getElementById('inpName').value,
+    email:   document.getElementById('inpEmail').value,
+    phone:   document.getElementById('inpPhone').value,
+    address: [
+      document.getElementById('inpAddress').value,
+      document.getElementById('inpCity').value,
+      document.getElementById('inpPostal').value
+    ].filter(Boolean).join(', '),
+    note:    document.getElementById('inpNote').value,
+    payment: payLabels[selectedPay] || selectedPay,
+    items:   Cart.get(),
+    total:   Cart.total(),
+    status:  'Paid'
+  };
+
+  // save to history
+  const history = JSON.parse(localStorage.getItem('rd_history') || '[]');
+  history.unshift(orderData);
+  localStorage.setItem('rd_history', JSON.stringify(history));
+
+  // clear cart
+  Cart.clear();
+
+  // fill invoice
+  buildInvoice(orderData);
+
+  // go to step 4
+  goStep(4);
+  document.getElementById('summaryPanel').style.display = 'none';
+  Toast.show('✅ Pembayaran dikonfirmasi! GGMU 🔴', 'success');
+}
+
+// ── BUILD INVOICE ─────────────────────────
+function buildInvoice(d) {
+  document.getElementById('invId').textContent      = d.id;
+  document.getElementById('invDate').textContent    = d.date;
+  document.getElementById('invName').textContent    = d.name;
+  document.getElementById('invEmail').textContent   = d.email;
+  document.getElementById('invPhone').textContent   = d.phone;
+  document.getElementById('invPayMethod').textContent = d.payment;
+  document.getElementById('invAddress').textContent = d.address + (d.note ? ` (${d.note})` : '');
+  document.getElementById('invSubtotal').textContent = formatIDR(d.total);
+  document.getElementById('invTotal').textContent    = formatIDR(d.total);
+
+  const tbody = document.getElementById('invItems');
+  tbody.innerHTML = d.items.map(i => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <img src="${i.image||''}"
+               onerror="this.src='https://placehold.co/32x32/111/da291c?text=MU'"
+               style="width:32px;height:32px;object-fit:cover;border-radius:5px;flex-shrink:0;">
+          <span>${i.name}</span>
+        </div>
+      </td>
+      <td style="color:#888;">× ${i.qty}</td>
+      <td style="color:#aaa;">${formatIDR(i.price)}</td>
+      <td>${formatIDR(i.price * i.qty)}</td>
+    </tr>
+  `).join('');
+}
+</script>
+
+</body>
+</html>
